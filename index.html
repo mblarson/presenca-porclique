@@ -14,7 +14,7 @@
         }
         
         body {
-            background: linear-gradient(135deg, #0a192f, #0a192f, #ff9e1b);
+            background: #062C3F;
             color: white;
             min-height: 100vh;
             display: flex;
@@ -36,6 +36,14 @@
             border: 1px solid rgba(255, 158, 27, 0.3);
         }
         
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(255, 158, 27, 0.5));
+        }
+        
         h1 {
             margin-bottom: 30px;
             font-size: 2.5rem;
@@ -44,7 +52,7 @@
         }
         
         .btn {
-            background: linear-gradient(45deg, #0a192f, #172a46);
+            background: linear-gradient(45deg, #062C3F, #0a3d5a);
             color: white;
             border: 1px solid rgba(255, 158, 27, 0.5);
             padding: 15px 30px;
@@ -61,7 +69,7 @@
         .btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-            background: linear-gradient(45deg, #172a46, #0a192f);
+            background: linear-gradient(45deg, #0a3d5a, #062C3F);
             border-color: #ff9e1b;
         }
         
@@ -97,7 +105,7 @@
         }
         
         .btn-controle {
-            background: linear-gradient(45deg, #0a192f, #172a46);
+            background: linear-gradient(45deg, #062C3F, #0a3d5a);
             padding: 12px 25px;
             font-size: 1rem;
             min-width: 100px;
@@ -105,7 +113,7 @@
         }
         
         .btn-controle:hover {
-            background: linear-gradient(45deg, #172a46, #0a192f);
+            background: linear-gradient(45deg, #0a3d5a, #062C3F);
             border-color: #ff9e1b;
         }
         
@@ -122,7 +130,7 @@
             max-width: 350px;
             text-align: center;
             background: rgba(255, 255, 255, 0.95);
-            color: #0a192f;
+            color: #062C3F;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
@@ -156,7 +164,7 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            background: linear-gradient(45deg, #0a192f, #172a46);
+            background: linear-gradient(45deg, #062C3F, #0a3d5a);
             color: white;
             padding: 15px 25px;
             border-radius: 10px;
@@ -195,9 +203,69 @@
             background: linear-gradient(45deg, #2ecc71, #27ae60);
         }
         
+        .btn-exportar-pdf {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            margin-top: 20px;
+            font-size: 1.2rem;
+            padding: 15px 30px;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .btn-exportar-pdf:hover {
+            background: linear-gradient(45deg, #c0392b, #a93226);
+        }
+        
+        .btn-exportar-texto {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            margin-top: 15px;
+            font-size: 1.2rem;
+            padding: 15px 30px;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .btn-exportar-texto:hover {
+            background: linear-gradient(45deg, #2980b9, #21618c);
+        }
+        
+        .resumo-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 158, 27, 0.3);
+        }
+        
+        .resumo-titulo {
+            font-size: 2rem;
+            color: #ff9e1b;
+            margin-bottom: 20px;
+        }
+        
+        .resumo-info {
+            font-size: 1.2rem;
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+        
+        .resumo-destaque {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #ff9e1b;
+            margin: 20px 0;
+            text-shadow: 0 0 15px rgba(255, 158, 27, 0.5);
+        }
+        
         @media (max-width: 600px) {
             .container {
                 padding: 30px 20px;
+            }
+            
+            .logo {
+                width: 100px;
+                height: 100px;
+                margin-bottom: 15px;
             }
             
             h1 {
@@ -213,9 +281,17 @@
                 padding: 20px 30px;
             }
             
-            .btn-terminar {
+            .btn-terminar, .btn-exportar-pdf, .btn-exportar-texto {
                 font-size: 1rem;
                 padding: 12px 25px;
+            }
+            
+            .resumo-titulo {
+                font-size: 1.5rem;
+            }
+            
+            .resumo-destaque {
+                font-size: 2.5rem;
             }
         }
     </style>
@@ -224,6 +300,7 @@
     <div class="container">
         <!-- Tela Inicial -->
         <div id="tela-inicial">
+            <img src="https://raw.githubusercontent.com/mblarson/sistema-culto/main/UMADEMATS---ALTERNATIVA-1.png" alt="Logotipo" class="logo">
             <h1>CONTAGEM DE PRESENTES</h1>
             <button id="btn-iniciar" class="btn">INICIAR CULTO</button>
             <button id="btn-continuar" class="btn hidden">CONTINUAR CULTO</button>
@@ -231,6 +308,7 @@
         
         <!-- Tela de Nome do Culto -->
         <div id="tela-nome" class="hidden">
+            <img src="https://raw.githubusercontent.com/mblarson/sistema-culto/main/UMADEMATS---ALTERNATIVA-1.png" alt="Logotipo" class="logo">
             <h1>Digite o nome do culto</h1>
             <div class="input-container">
                 <input type="text" id="nome-culto" placeholder="Nome do culto" autofocus>
@@ -240,6 +318,7 @@
         
         <!-- Tela Principal -->
         <div id="tela-principal" class="hidden">
+            <img src="https://raw.githubusercontent.com/mblarson/sistema-culto/main/UMADEMATS---ALTERNATIVA-1.png" alt="Logotipo" class="logo">
             <h1 class="titulo-culto" id="titulo-culto"></h1>
             <div class="contador" id="contador">0</div>
             <button id="btn-cheguei" class="btn btn-cheguei">Cheguei ao culto 😎</button>
@@ -254,8 +333,24 @@
             <button id="btn-novo-culto" class="btn btn-novo-culto">Novo Culto</button>
         </div>
         
+        <!-- Tela de Resumo -->
+        <div id="tela-resumo" class="hidden">
+            <img src="https://raw.githubusercontent.com/mblarson/sistema-culto/main/UMADEMATS---ALTERNATIVA-1.png" alt="Logotipo" class="logo">
+            <h1 class="resumo-titulo">Resumo do Culto</h1>
+            <div class="resumo-container">
+                <div class="resumo-info">Culto: <span id="resumo-nome"></span></div>
+                <div class="resumo-info">Data e Hora: <span id="resumo-data"></span></div>
+                <div class="resumo-destaque" id="resumo-contador">0</div>
+                <div class="resumo-info">participantes presentes</div>
+            </div>
+            
+            <button id="btn-exportar-pdf" class="btn btn-exportar-pdf">Exportar PDF</button>
+            <button id="btn-exportar-texto" class="btn btn-exportar-texto">Exportar Texto</button>
+            <button id="btn-voltar-inicio" class="btn btn-novo-culto">Voltar ao Início</button>
+        </div>
+        
         <div class="footer">
-            Sistema de Contagem de Culto - Desenvolvido com ❤️
+            Sistema de Contagem de Culto - Desenvolvido por Umademats
         </div>
     </div>
     
@@ -266,6 +361,7 @@
         const telaInicial = document.getElementById('tela-inicial');
         const telaNome = document.getElementById('tela-nome');
         const telaPrincipal = document.getElementById('tela-principal');
+        const telaResumo = document.getElementById('tela-resumo');
         const btnIniciar = document.getElementById('btn-iniciar');
         const btnContinuar = document.getElementById('btn-continuar');
         const btnConfirmar = document.getElementById('btn-confirmar');
@@ -278,7 +374,15 @@
         const btnExportar = document.getElementById('btn-exportar');
         const btnNovoCulto = document.getElementById('btn-novo-culto');
         const btnTerminar = document.getElementById('btn-terminar');
+        const btnExportarPdf = document.getElementById('btn-exportar-pdf');
+        const btnExportarTexto = document.getElementById('btn-exportar-texto');
+        const btnVoltarInicio = document.getElementById('btn-voltar-inicio');
         const notification = document.getElementById('notification');
+        
+        // Elementos da tela de resumo
+        const resumoNome = document.getElementById('resumo-nome');
+        const resumoData = document.getElementById('resumo-data');
+        const resumoContador = document.getElementById('resumo-contador');
         
         // Variáveis
         let contador = 0;
@@ -311,6 +415,8 @@
             localStorage.removeItem('dadosCulto');
             nomeCulto = '';
             contador = 0;
+            // Esconder o botão de continuar
+            btnContinuar.classList.add('hidden');
         }
         
         // Carregar dados ao iniciar
@@ -397,7 +503,8 @@
                 limparDados();
                 telaPrincipal.classList.add('hidden');
                 telaInicial.classList.remove('hidden');
-                btnContinuar.classList.add('hidden');
+                // Garantir que o contador seja atualizado na tela
+                atualizarContador();
             }
         });
         
@@ -407,24 +514,41 @@
                 return;
             }
             
-            if (confirm(`Deseja terminar o culto "${nomeCulto}"? Um relatório será gerado.`)) {
-                exportarPDF();
-                
-                // Após gerar o PDF, perguntar se deseja iniciar um novo culto
-                setTimeout(() => {
-                    if (confirm('Deseja iniciar um novo culto?')) {
-                        limparDados();
-                        telaPrincipal.classList.add('hidden');
-                        telaInicial.classList.remove('hidden');
-                        btnContinuar.classList.add('hidden');
-                    }
-                }, 1000);
+            if (confirm(`Deseja terminar o culto "${nomeCulto}"?`)) {
+                // Mostrar tela de resumo
+                mostrarResumo();
             }
+        });
+        
+        btnExportarPdf.addEventListener('click', () => {
+            exportarPDF();
+        });
+        
+        btnExportarTexto.addEventListener('click', () => {
+            exportarTexto();
+        });
+        
+        btnVoltarInicio.addEventListener('click', () => {
+            limparDados();
+            telaResumo.classList.add('hidden');
+            telaInicial.classList.remove('hidden');
+            atualizarContador();
         });
         
         // Funções
         function atualizarContador() {
             contadorElement.textContent = contador;
+        }
+        
+        function mostrarResumo() {
+            // Preencher dados do resumo
+            resumoNome.textContent = nomeCulto;
+            resumoData.textContent = new Date().toLocaleString('pt-BR');
+            resumoContador.textContent = contador;
+            
+            // Mudar para tela de resumo
+            telaPrincipal.classList.add('hidden');
+            telaResumo.classList.remove('hidden');
         }
         
         function exportarPDF() {
@@ -457,6 +581,23 @@
             // Salvar o PDF
             doc.save(`relatorio_culto_${nomeCulto.replace(/\s+/g, '_')}.pdf`);
             showNotification('PDF exportado com sucesso!');
+        }
+        
+        function exportarTexto() {
+            const texto = `RELATÓRIO DE PRESENÇA NO CULTO\n\n` +
+                         `Culto: ${nomeCulto}\n` +
+                         `Total de Participantes: ${contador}\n` +
+                         `Data e Hora: ${new Date().toLocaleString('pt-BR')}\n\n` +
+                         `Sistema de Contagem de Culto`;
+            
+            // Copiar para área de transferência
+            navigator.clipboard.writeText(texto).then(() => {
+                showNotification('Texto copiado para a área de transferência!');
+            }).catch(() => {
+                // Se não conseguir copiar automaticamente, mostrar em um prompt
+                prompt('Copie o texto abaixo:', texto);
+                showNotification('Selecione e copie o texto!');
+            });
         }
         
         function showNotification(message) {
