@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Contagem de Culto</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a192f, #0a192f, #ff9e1b);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+        
+        .container {
+            text-align: center;
+            background: rgba(10, 25, 47, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            width: 100%;
+            max-width: 500px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 158, 27, 0.3);
+        }
+        
+        h1 {
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            color: #ffffff;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #0a192f, #172a46);
+            color: white;
+            border: 1px solid rgba(255, 158, 27, 0.5);
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #172a46, #0a192f);
+            border-color: #ff9e1b;
+        }
+        
+        .btn-cheguei {
+            background: linear-gradient(45deg, #ff9e1b, #ff7700);
+            font-size: 1.8rem;
+            padding: 25px 40px;
+            margin: 30px 0;
+            width: 100%;
+            max-width: 350px;
+            border: none;
+        }
+        
+        .btn-cheguei:hover {
+            background: linear-gradient(45deg, #ff7700, #e65c00);
+        }
+        
+        .contador {
+            font-size: 5rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #ff9e1b;
+            text-shadow: 0 0 15px rgba(255, 158, 27, 0.7);
+            line-height: 1;
+        }
+        
+        .botoes-controle {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-controle {
+            background: linear-gradient(45deg, #0a192f, #172a46);
+            padding: 12px 25px;
+            font-size: 1rem;
+            min-width: 100px;
+            border: 1px solid rgba(255, 158, 27, 0.3);
+        }
+        
+        .btn-controle:hover {
+            background: linear-gradient(45deg, #172a46, #0a192f);
+            border-color: #ff9e1b;
+        }
+        
+        .input-container {
+            margin: 25px 0;
+        }
+        
+        input {
+            padding: 15px 25px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 158, 27, 0.5);
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            color: #0a192f;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 158, 27, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .titulo-culto {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: #ff9e1b;
+            text-shadow: 0 2px 10px rgba(255, 158, 27, 0.5);
+        }
+        
+        .footer {
+            margin-top: 40px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            text-align: center;
+            color: #ffffff;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #0a192f, #172a46);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            border-left: 4px solid #ff9e1b;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .contador {
+                font-size: 4rem;
+            }
+            
+            .btn-cheguei {
+                font-size: 1.5rem;
+                padding: 20px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Tela Inicial -->
+        <div id="tela-inicial">
+            <h1>CONTAGEM DE PRESENTES</h1>
+            <button id="btn-iniciar" class="btn">INICIAR CULTO</button>
+        </div>
+        
+        <!-- Tela de Nome do Culto -->
+        <div id="tela-nome" class="hidden">
+            <h1>Digite o nome do culto</h1>
+            <div class="input-container">
+                <input type="text" id="nome-culto" placeholder="Nome do culto" autofocus>
+            </div>
+            <button id="btn-confirmar" class="btn">INICIAR</button>
+        </div>
+        
+        <!-- Tela Principal -->
+        <div id="tela-principal" class="hidden">
+            <h1 class="titulo-culto" id="titulo-culto"></h1>
+            <div class="contador" id="contador">0</div>
+            <button id="btn-cheguei" class="btn btn-cheguei">Cheguei ao culto 😎</button>
+            
+            <div class="botoes-controle">
+                <button id="btn-remover" class="btn btn-controle">Remover</button>
+                <button id="btn-zerar" class="btn btn-controle">Zerar</button>
+                <button id="btn-exportar" class="btn btn-controle">Exportar</button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            Sistema de Contagem de Culto - Desenvolvido com ❤️
+        </div>
+    </div>
+    
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Elementos do DOM
+        const telaInicial = document.getElementById('tela-inicial');
+        const telaNome = document.getElementById('tela-nome');
+        const telaPrincipal = document.getElementById('tela-principal');
+        const btnIniciar = document.getElementById('btn-iniciar');
+        const btnConfirmar = document.getElementById('btn-confirmar');
+        const nomeCultoInput = document.getElementById('nome-culto');
+        const tituloCulto = document.getElementById('titulo-culto');
+        const contadorElement = document.getElementById('contador');
+        const btnCheguei = document.getElementById('btn-cheguei');
+        const btnRemover = document.getElementById('btn-remover');
+        const btnZerar = document.getElementById('btn-zerar');
+        const btnExportar = document.getElementById('btn-exportar');
+        const notification = document.getElementById('notification');
+        
+        // Variáveis
+        let contador = 0;
+        let nomeCulto = '';
+        
+        // Event Listeners
+        btnIniciar.addEventListener('click', () => {
+            telaInicial.classList.add('hidden');
+            telaNome.classList.remove('hidden');
+            nomeCultoInput.focus();
+        });
+        
+        btnConfirmar.addEventListener('click', () => {
+            nomeCulto = nomeCultoInput.value.trim();
+            if (nomeCulto === '') {
+                showNotification('Por favor, digite o nome do culto!');
+                return;
+            }
+            
+            tituloCulto.textContent = nomeCulto;
+            telaNome.classList.add('hidden');
+            telaPrincipal.classList.remove('hidden');
+        });
+        
+        // Permitir pressionar Enter no input
+        nomeCultoInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                btnConfirmar.click();
+            }
+        });
+        
+        btnCheguei.addEventListener('click', () => {
+            contador++;
+            atualizarContador();
+            showNotification('Mais um participante registrado!');
+        });
+        
+        btnRemover.addEventListener('click', () => {
+            if (contador > 0) {
+                contador--;
+                atualizarContador();
+                showNotification('Participante removido!');
+            } else {
+                showNotification('Não há participantes para remover!');
+            }
+        });
+        
+        btnZerar.addEventListener('click', () => {
+            if (contador > 0) {
+                if (confirm('Tem certeza que deseja zerar o contador?')) {
+                    contador = 0;
+                    atualizarContador();
+                    showNotification('Contador zerado!');
+                }
+            } else {
+                showNotification('O contador já está em zero!');
+            }
+        });
+        
+        btnExportar.addEventListener('click', () => {
+            if (contador === 0) {
+                showNotification('Não há participantes para exportar!');
+                return;
+            }
+            
+            exportarPDF();
+        });
+        
+        // Funções
+        function atualizarContador() {
+            contadorElement.textContent = contador;
+        }
+        
+        function exportarPDF() {
+            // Verificar se a biblioteca jsPDF foi carregada
+            if (typeof window.jspdf === 'undefined') {
+                showNotification('Erro: Biblioteca PDF não carregada. Verifique sua conexão.');
+                return;
+            }
+            
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Cabeçalho
+            doc.setFontSize(20);
+            doc.text('Relatório de Presença no Culto', 105, 20, { align: 'center' });
+            
+            // Informações do culto
+            doc.setFontSize(16);
+            doc.text(`Culto: ${nomeCulto}`, 20, 40);
+            doc.text(`Total de Participantes: ${contador}`, 20, 60);
+            
+            // Data e hora
+            const dataHora = new Date().toLocaleString('pt-BR');
+            doc.text(`Data e Hora: ${dataHora}`, 20, 80);
+            
+            // Rodapé
+            doc.setFontSize(12);
+            doc.text('Sistema de Contagem de Culto', 105, 280, { align: 'center' });
+            
+            // Salvar o PDF
+            doc.save(`relatorio_culto_${nomeCulto.replace(/\s+/g, '_')}.pdf`);
+            showNotification('PDF exportado com sucesso!');
+        }
+        
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
