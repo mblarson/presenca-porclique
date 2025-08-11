@@ -171,6 +171,30 @@
             transform: translateX(0);
         }
         
+        .btn-novo-culto {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            margin-top: 20px;
+            font-size: 1rem;
+            padding: 10px 20px;
+        }
+        
+        .btn-novo-culto:hover {
+            background: linear-gradient(45deg, #c0392b, #a93226);
+        }
+        
+        .btn-terminar {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            margin-top: 20px;
+            font-size: 1.2rem;
+            padding: 15px 30px;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .btn-terminar:hover {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+        }
+        
         @media (max-width: 600px) {
             .container {
                 padding: 30px 20px;
@@ -188,6 +212,11 @@
                 font-size: 1.5rem;
                 padding: 20px 30px;
             }
+            
+            .btn-terminar {
+                font-size: 1rem;
+                padding: 12px 25px;
+            }
         }
     </style>
 </head>
@@ -197,6 +226,7 @@
         <div id="tela-inicial">
             <h1>CONTAGEM DE PRESENTES</h1>
             <button id="btn-iniciar" class="btn">INICIAR CULTO</button>
+            <button id="btn-continuar" class="btn hidden">CONTINUAR CULTO</button>
         </div>
         
         <!-- Tela de Nome do Culto -->
@@ -219,6 +249,9 @@
                 <button id="btn-zerar" class="btn btn-controle">Zerar</button>
                 <button id="btn-exportar" class="btn btn-controle">Exportar</button>
             </div>
+            
+            <button id="btn-terminar" class="btn btn-terminar">TERMINAR CULTO</button>
+            <button id="btn-novo-culto" class="btn btn-novo-culto">Novo Culto</button>
         </div>
         
         <div class="footer">
@@ -234,6 +267,7 @@
         const telaNome = document.getElementById('tela-nome');
         const telaPrincipal = document.getElementById('tela-principal');
         const btnIniciar = document.getElementById('btn-iniciar');
+        const btnContinuar = document.getElementById('btn-continuar');
         const btnConfirmar = document.getElementById('btn-confirmar');
         const nomeCultoInput = document.getElementById('nome-culto');
         const tituloCulto = document.getElementById('titulo-culto');
@@ -242,17 +276,60 @@
         const btnRemover = document.getElementById('btn-remover');
         const btnZerar = document.getElementById('btn-zerar');
         const btnExportar = document.getElementById('btn-exportar');
+        const btnNovoCulto = document.getElementById('btn-novo-culto');
+        const btnTerminar = document.getElementById('btn-terminar');
         const notification = document.getElementById('notification');
         
         // Variáveis
         let contador = 0;
         let nomeCulto = '';
         
+        // Funções de persistência
+        function salvarDados() {
+            const dados = {
+                nomeCulto: nomeCulto,
+                contador: contador
+            };
+            localStorage.setItem('dadosCulto', JSON.stringify(dados));
+        }
+        
+        function carregarDados() {
+            const dadosSalvos = localStorage.getItem('dadosCulto');
+            if (dadosSalvos) {
+                const dados = JSON.parse(dadosSalvos);
+                nomeCulto = dados.nomeCulto || '';
+                contador = dados.contador || 0;
+                
+                // Se houver dados salvos, mostrar o botão de continuar
+                if (nomeCulto) {
+                    btnContinuar.classList.remove('hidden');
+                }
+            }
+        }
+        
+        function limparDados() {
+            localStorage.removeItem('dadosCulto');
+            nomeCulto = '';
+            contador = 0;
+        }
+        
+        // Carregar dados ao iniciar
+        carregarDados();
+        
         // Event Listeners
         btnIniciar.addEventListener('click', () => {
             telaInicial.classList.add('hidden');
             telaNome.classList.remove('hidden');
             nomeCultoInput.focus();
+        });
+        
+        btnContinuar.addEventListener('click', () => {
+            if (nomeCulto) {
+                tituloCulto.textContent = nomeCulto;
+                atualizarContador();
+                telaInicial.classList.add('hidden');
+                telaPrincipal.classList.remove('hidden');
+            }
         });
         
         btnConfirmar.addEventListener('click', () => {
@@ -265,6 +342,7 @@
             tituloCulto.textContent = nomeCulto;
             telaNome.classList.add('hidden');
             telaPrincipal.classList.remove('hidden');
+            salvarDados();
         });
         
         // Permitir pressionar Enter no input
@@ -277,6 +355,7 @@
         btnCheguei.addEventListener('click', () => {
             contador++;
             atualizarContador();
+            salvarDados();
             showNotification('Mais um participante registrado!');
         });
         
@@ -284,6 +363,7 @@
             if (contador > 0) {
                 contador--;
                 atualizarContador();
+                salvarDados();
                 showNotification('Participante removido!');
             } else {
                 showNotification('Não há participantes para remover!');
@@ -295,6 +375,7 @@
                 if (confirm('Tem certeza que deseja zerar o contador?')) {
                     contador = 0;
                     atualizarContador();
+                    salvarDados();
                     showNotification('Contador zerado!');
                 }
             } else {
@@ -309,6 +390,36 @@
             }
             
             exportarPDF();
+        });
+        
+        btnNovoCulto.addEventListener('click', () => {
+            if (confirm('Deseja iniciar um novo culto? Os dados atuais serão perdidos.')) {
+                limparDados();
+                telaPrincipal.classList.add('hidden');
+                telaInicial.classList.remove('hidden');
+                btnContinuar.classList.add('hidden');
+            }
+        });
+        
+        btnTerminar.addEventListener('click', () => {
+            if (contador === 0) {
+                showNotification('Não há participantes para exportar!');
+                return;
+            }
+            
+            if (confirm(`Deseja terminar o culto "${nomeCulto}"? Um relatório será gerado.`)) {
+                exportarPDF();
+                
+                // Após gerar o PDF, perguntar se deseja iniciar um novo culto
+                setTimeout(() => {
+                    if (confirm('Deseja iniciar um novo culto?')) {
+                        limparDados();
+                        telaPrincipal.classList.add('hidden');
+                        telaInicial.classList.remove('hidden');
+                        btnContinuar.classList.add('hidden');
+                    }
+                }, 1000);
+            }
         });
         
         // Funções
