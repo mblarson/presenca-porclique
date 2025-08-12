@@ -303,78 +303,93 @@
             text-shadow: 0 0 15px rgba(255, 158, 27, 0.5);
         }
         
-        /* Modo Horizontal */
-        body.horizontal {
-            padding: 10px;
-        }
-        
-        body.horizontal .container {
-            max-width: 95%;
+        /* Modo Horizontal - Apenas para a tela principal */
+        body.horizontal-tela-principal #tela-principal .container {
+            max-width: 98%;
             max-height: 95vh;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-            padding: 30px;
+            width: 98%;
+            height: 95vh;
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            grid-template-rows: auto 1fr auto;
+            gap: 20px;
+            padding: 20px;
         }
         
-        body.horizontal .container > div {
-            flex: 1;
+        body.horizontal-tela-principal #tela-principal .logo-container {
+            grid-column: 1;
+            grid-row: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        body.horizontal-tela-principal #tela-principal .logo {
+            width: 100%;
+            max-width: 250px;
+            height: auto;
+            margin-bottom: 0;
+        }
+        
+        body.horizontal-tela-principal #tela-principal .content-left {
+            grid-column: 2;
+            grid-row: 1 / 3;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            text-align: center;
         }
         
-        body.horizontal .logo-container {
-            flex: 0 0 30%;
-            margin-right: 20px;
+        body.horizontal-tela-principal #tela-principal .content-right {
+            grid-column: 3;
+            grid-row: 1 / 3;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
         }
         
-        body.horizontal .logo {
-            width: 100%;
-            max-width: 300px;
-            height: auto;
+        body.horizontal-tela-principal #tela-principal .titulo-culto {
+            font-size: 2.5rem;
             margin-bottom: 20px;
         }
         
-        body.horizontal .content-container {
-            flex: 0 0 70%;
-            text-align: left;
-        }
-        
-        body.horizontal h1,
-        body.horizontal .titulo-culto,
-        body.horizontal .resumo-titulo {
-            text-align: left;
-            margin-bottom: 20px;
-        }
-        
-        body.horizontal .contador {
-            font-size: 6rem;
-            text-align: left;
+        body.horizontal-tela-principal #tela-principal .contador {
+            font-size: 8rem;
             margin: 20px 0;
         }
         
-        body.horizontal .btn-cheguei {
-            align-self: flex-start;
-            margin: 20px 0;
+        body.horizontal-tela-principal #tela-principal .btn-cheguei {
+            font-size: 2rem;
+            padding: 20px 40px;
+            max-width: 400px;
         }
         
-        body.horizontal .botoes-controle {
-            justify-content: flex-start;
+        body.horizontal-tela-principal #tela-principal .botoes-controle {
+            flex-direction: column;
+            gap: 15px;
             margin-top: 20px;
         }
         
-        body.horizontal .btn-terminar,
-        body.horizontal .btn-novo-culto,
-        body.horizontal .btn-exportar-pdf,
-        body.horizontal .btn-exportar-texto {
-            align-self: flex-start;
+        body.horizontal-tela-principal #tela-principal .btn-controle {
+            width: 200px;
+            padding: 15px 25px;
+            font-size: 1.2rem;
         }
         
-        body.horizontal .resumo-container {
-            margin: 20px 0;
+        body.horizontal-tela-principal #tela-principal .btn-terminar,
+        body.horizontal-tela-principal #tela-principal .btn-novo-culto {
+            width: 200px;
+            padding: 15px 25px;
+            font-size: 1.2rem;
+        }
+        
+        body.horizontal-tela-principal #tela-principal .footer {
+            grid-column: 1 / 4;
+            grid-row: 3;
+            margin-top: 10px;
         }
         
         /* Estilos responsivos para tablets */
@@ -419,43 +434,44 @@
             }
             
             /* Ajustes para modo horizontal em tablets pequenos */
-            body.horizontal .container {
-                flex-direction: column;
+            body.horizontal-tela-principal #tela-principal .container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto auto;
                 max-width: 95%;
             }
             
-            body.horizontal .logo-container,
-            body.horizontal .content-container {
-                flex: 1;
-                width: 100%;
-                margin-right: 0;
+            body.horizontal-tela-principal #tela-principal .logo-container,
+            body.horizontal-tela-principal #tela-principal .content-left,
+            body.horizontal-tela-principal #tela-principal .content-right {
+                grid-column: 1;
             }
             
-            body.horizontal .content-container {
-                text-align: center;
+            body.horizontal-tela-principal #tela-principal .logo-container {
+                grid-row: 1;
             }
             
-            body.horizontal h1,
-            body.horizontal .titulo-culto,
-            body.horizontal .resumo-titulo,
-            body.horizontal .contador {
-                text-align: center;
+            body.horizontal-tela-principal #tela-principal .content-left {
+                grid-row: 2;
+            }
+            
+            body.horizontal-tela-principal #tela-principal .content-right {
+                grid-row: 3;
+            }
+            
+            body.horizontal-tela-principal #tela-principal .footer {
+                grid-row: 4;
             }
         }
         
         /* Estilos para tablets maiores em modo horizontal */
         @media (min-width: 768px) and (orientation: landscape) {
-            body.horizontal .container {
-                max-width: 95%;
-                max-height: 90vh;
+            body.horizontal-tela-principal #tela-principal .contador {
+                font-size: 10rem;
             }
             
-            body.horizontal .logo {
-                max-width: 400px;
-            }
-            
-            body.horizontal .contador {
-                font-size: 8rem;
+            body.horizontal-tela-principal #tela-principal .btn-cheguei {
+                font-size: 2.5rem;
+                padding: 25px 50px;
             }
         }
     </style>
@@ -509,10 +525,12 @@
             <div class="logo-container">
                 <img src="https://raw.githubusercontent.com/mblarson/sistema-culto/main/Untitled%20design.png" alt="Logotipo" class="logo">
             </div>
-            <div class="content-container">
+            <div class="content-left">
                 <h1 class="titulo-culto" id="titulo-culto"></h1>
                 <div class="contador" id="contador">0</div>
                 <button id="btn-cheguei" class="btn btn-cheguei">Cheguei ao culto 😎</button>
+            </div>
+            <div class="content-right">
                 <div class="botoes-controle">
                     <button id="btn-remover" class="btn btn-controle">Remover</button>
                     <button id="btn-zerar" class="btn btn-controle">Zerar</button>
@@ -520,8 +538,8 @@
                 </div>
                 <button id="btn-terminar" class="btn btn-terminar">TERMINAR CULTO</button>
                 <button id="btn-novo-culto" class="btn btn-novo-culto">Novo Culto</button>
-                <div class="footer">Sistema de Contagem de Culto - Desenvolvido por UMADEMATS</div>
             </div>
+            <div class="footer">Sistema de Contagem de Culto - Desenvolvido por UMADEMATS</div>
         </div>
         
         <!-- Tela de Resumo -->
@@ -621,11 +639,11 @@
             orientacaoAtual = orientacao;
             
             if (orientacao === 'horizontal') {
-                document.body.classList.add('horizontal');
+                document.body.classList.add('horizontal-tela-principal');
                 btnVertical.classList.remove('active');
                 btnHorizontal.classList.add('active');
             } else {
-                document.body.classList.remove('horizontal');
+                document.body.classList.remove('horizontal-tela-principal');
                 btnVertical.classList.add('active');
                 btnHorizontal.classList.remove('active');
             }
@@ -635,8 +653,8 @@
         
         function detectarOrientacaoAutomatica() {
             if (window.matchMedia("(orientation: landscape)").matches) {
-                // Apenas mudar para horizontal se não estiver em um dispositivo móvel pequeno
-                if (window.innerWidth > 768) {
+                // Apenas mudar para horizontal se estiver na tela principal e em tablet grande
+                if (!telaPrincipal.classList.contains('hidden') && window.innerWidth > 768) {
                     aplicarOrientacao('horizontal');
                 }
             } else {
@@ -678,6 +696,11 @@
             atualizarContador();
             telaInicial.classList.add('hidden');
             telaPrincipal.classList.remove('hidden');
+            
+            // Se estiver em tablet grande e paisagem, ativar modo horizontal
+            if (window.innerWidth > 768 && window.matchMedia("(orientation: landscape)").matches) {
+                aplicarOrientacao('horizontal');
+            }
         });
         
         btnConfirmar.addEventListener('click', () => {
@@ -691,6 +714,11 @@
             telaNome.classList.add('hidden');
             telaPrincipal.classList.remove('hidden');
             salvarDados();
+            
+            // Se estiver em tablet grande e paisagem, ativar modo horizontal
+            if (window.innerWidth > 768 && window.matchMedia("(orientation: landscape)").matches) {
+                aplicarOrientacao('horizontal');
+            }
         });
         
         nomeCultoInput.addEventListener('keypress', e => {
