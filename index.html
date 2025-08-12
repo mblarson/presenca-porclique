@@ -22,52 +22,8 @@
             align-items: center;
             flex-direction: column;
             padding: 20px;
-            position: relative;
         }
         
-        /* Controles de orientação */
-        .orientacao-controls {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1001;
-            display: flex;
-            gap: 10px;
-            background: rgba(10, 25, 47, 0.8);
-            padding: 8px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 158, 27, 0.3);
-        }
-        
-        .orientacao-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 158, 27, 0.3);
-            border-radius: 8px;
-            padding: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .orientacao-btn:hover {
-            background: rgba(255, 158, 27, 0.2);
-            transform: scale(1.05);
-        }
-        
-        .orientacao-btn.active {
-            background: rgba(255, 158, 27, 0.4);
-            border-color: #ff9e1b;
-        }
-        
-        .orientacao-btn svg {
-            width: 24px;
-            height: 24px;
-            fill: #ff9e1b;
-        }
-        
-        /* Container principal */
         .container {
             text-align: center;
             background: rgba(10, 25, 47, 0.9);
@@ -78,7 +34,6 @@
             max-width: 500px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 158, 27, 0.3);
-            transition: all 0.3s ease;
         }
         
         .logo {
@@ -275,124 +230,6 @@
             background: linear-gradient(45deg, #2980b9, #21618c);
         }
         
-        .resumo-container {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 30px;
-            margin: 20px 0;
-            border: 1px solid rgba(255, 158, 27, 0.3);
-        }
-        
-        .resumo-titulo {
-            font-size: 2rem;
-            color: #ff9e1b;
-            margin-bottom: 20px;
-        }
-        
-        .resumo-info {
-            font-size: 1.2rem;
-            margin: 15px 0;
-            line-height: 1.6;
-        }
-        
-        .resumo-destaque {
-            font-size: 3rem;
-            font-weight: bold;
-            color: #ff9e1b;
-            margin: 20px 0;
-            text-shadow: 0 0 15px rgba(255, 158, 27, 0.5);
-        }
-        
-        /* Modo Horizontal - Apenas para a tela principal */
-        body.horizontal-tela-principal #tela-principal .container {
-            max-width: 98%;
-            max-height: 95vh;
-            width: 98%;
-            height: 95vh;
-            display: grid;
-            grid-template-columns: 1fr 2fr 1fr;
-            grid-template-rows: auto 1fr auto;
-            gap: 20px;
-            padding: 20px;
-        }
-        
-        body.horizontal-tela-principal #tela-principal .logo-container {
-            grid-column: 1;
-            grid-row: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        body.horizontal-tela-principal #tela-principal .logo {
-            width: 100%;
-            max-width: 250px;
-            height: auto;
-            margin-bottom: 0;
-        }
-        
-        body.horizontal-tela-principal #tela-principal .content-left {
-            grid-column: 2;
-            grid-row: 1 / 3;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-        
-        body.horizontal-tela-principal #tela-principal .content-right {
-            grid-column: 3;
-            grid-row: 1 / 3;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-        }
-        
-        body.horizontal-tela-principal #tela-principal .titulo-culto {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-        
-        body.horizontal-tela-principal #tela-principal .contador {
-            font-size: 8rem;
-            margin: 20px 0;
-        }
-        
-        body.horizontal-tela-principal #tela-principal .btn-cheguei {
-            font-size: 2rem;
-            padding: 20px 40px;
-            max-width: 400px;
-        }
-        
-        body.horizontal-tela-principal #tela-principal .botoes-controle {
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        body.horizontal-tela-principal #tela-principal .btn-controle {
-            width: 200px;
-            padding: 15px 25px;
-            font-size: 1.2rem;
-        }
-        
-        body.horizontal-tela-principal #tela-principal .btn-terminar,
-        body.horizontal-tela-principal #tela-principal .btn-novo-culto {
-            width: 200px;
-            padding: 15px 25px;
-            font-size: 1.2rem;
-        }
-        
-        body.horizontal-tela-principal #tela-principal .footer {
-            grid-column: 1 / 4;
-            grid-row: 3;
-            margin-top: 10px;
-        }
-        
-        /* Estilos responsivos para tablets */
         @media (max-width: 600px) {
             .container {
                 padding: 15px 20px;
@@ -432,141 +269,61 @@
                 font-size: 1rem;
                 padding: 8px 15px;
             }
-            
-            /* Ajustes para modo horizontal em tablets pequenos */
-            body.horizontal-tela-principal #tela-principal .container {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto auto auto auto;
-                max-width: 95%;
-            }
-            
-            body.horizontal-tela-principal #tela-principal .logo-container,
-            body.horizontal-tela-principal #tela-principal .content-left,
-            body.horizontal-tela-principal #tela-principal .content-right {
-                grid-column: 1;
-            }
-            
-            body.horizontal-tela-principal #tela-principal .logo-container {
-                grid-row: 1;
-            }
-            
-            body.horizontal-tela-principal #tela-principal .content-left {
-                grid-row: 2;
-            }
-            
-            body.horizontal-tela-principal #tela-principal .content-right {
-                grid-row: 3;
-            }
-            
-            body.horizontal-tela-principal #tela-principal .footer {
-                grid-row: 4;
-            }
-        }
-        
-        /* Estilos para tablets maiores em modo horizontal */
-        @media (min-width: 768px) and (orientation: landscape) {
-            body.horizontal-tela-principal #tela-principal .contador {
-                font-size: 10rem;
-            }
-            
-            body.horizontal-tela-principal #tela-principal .btn-cheguei {
-                font-size: 2.5rem;
-                padding: 25px 50px;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Controles de Orientação -->
-    <div class="orientacao-controls">
-        <button id="btn-vertical" class="orientacao-btn active" title="Modo Vertical">
-            <svg viewBox="0 0 24 24">
-                <path d="M3 5h2V3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-2v2H3v14h14V5h2c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v2H3zm2 2h14v14H5V7z"/>
-            </svg>
-        </button>
-        <button id="btn-horizontal" class="orientacao-btn" title="Modo Horizontal">
-            <svg viewBox="0 0 24 24">
-                <path d="M21 4H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H3V6h18v12z"/>
-            </svg>
-        </button>
-    </div>
-
     <div class="container">
         <!-- Tela Inicial -->
         <div id="tela-inicial">
-            <div class="logo-container">
-                <img src="https://raw.githubusercontent.com/mblarson/sistema-culto/main/Untitled%20design.png" alt="Logotipo" class="logo">
-            </div>
-            <div class="content-container">
-                <h1>CONTAGEM DE PRESENTES</h1>
-                <button id="btn-iniciar" class="btn">INICIAR CULTO</button>
-                <button id="btn-continuar" class="btn hidden">CONTINUAR CULTO</button>
-                <div class="footer">Sistema de Contagem de Culto - Desenvolvido por UMADEMATS</div>
-            </div>
+            <img src="https://raw.githubusercontent.com/mblarson/sistema-culto/main/Untitled%20design.png" alt="Logotipo" class="logo">
+            <h1>CONTAGEM DE PRESENTES</h1>
+            <button id="btn-iniciar" class="btn">INICIAR CULTO</button>
+            <button id="btn-continuar" class="btn hidden">CONTINUAR CULTO</button>
         </div>
-        
         <!-- Tela de Nome do Culto -->
         <div id="tela-nome" class="hidden">
-            <div class="logo-container">
-                <img src="https://raw.githubusercontent.com/mblarson/sistema-culto/main/Untitled%20design.png" alt="Logotipo" class="logo">
+            <img src="https://raw.githubusercontent.com/mblarson/sistema-culto/main/Untitled%20design.png" alt="Logotipo" class="logo">
+            <h1>Digite o nome do culto</h1>
+            <div class="input-container">
+                <input type="text" id="nome-culto" placeholder="Nome do culto" autofocus>
             </div>
-            <div class="content-container">
-                <h1>Digite o nome do culto</h1>
-                <div class="input-container">
-                    <input type="text" id="nome-culto" placeholder="Nome do culto" autofocus>
-                </div>
-                <button id="btn-confirmar" class="btn">INICIAR</button>
-                <div class="footer">Sistema de Contagem de Culto - Desenvolvido por UMADEMATS</div>
-            </div>
+            <button id="btn-confirmar" class="btn">INICIAR</button>
         </div>
-        
         <!-- Tela Principal -->
         <div id="tela-principal" class="hidden">
-            <div class="logo-container">
-                <img src="https://raw.githubusercontent.com/mblarson/sistema-culto/main/Untitled%20design.png" alt="Logotipo" class="logo">
+            <img src="https://raw.githubusercontent.com/mblarson/sistema-culto/main/Untitled%20design.png" alt="Logotipo" class="logo">
+            <h1 class="titulo-culto" id="titulo-culto"></h1>
+            <div class="contador" id="contador">0</div>
+            <button id="btn-cheguei" class="btn btn-cheguei">Cheguei ao culto 😎</button>
+            <div class="botoes-controle">
+                <button id="btn-remover" class="btn btn-controle">Remover</button>
+                <button id="btn-zerar" class="btn btn-controle">Zerar</button>
+                <button id="btn-exportar" class="btn btn-controle">Exportar</button>
             </div>
-            <div class="content-left">
-                <h1 class="titulo-culto" id="titulo-culto"></h1>
-                <div class="contador" id="contador">0</div>
-                <button id="btn-cheguei" class="btn btn-cheguei">Cheguei ao culto 😎</button>
-            </div>
-            <div class="content-right">
-                <div class="botoes-controle">
-                    <button id="btn-remover" class="btn btn-controle">Remover</button>
-                    <button id="btn-zerar" class="btn btn-controle">Zerar</button>
-                    <button id="btn-exportar" class="btn btn-controle">Exportar</button>
-                </div>
-                <button id="btn-terminar" class="btn btn-terminar">TERMINAR CULTO</button>
-                <button id="btn-novo-culto" class="btn btn-novo-culto">Novo Culto</button>
-            </div>
-            <div class="footer">Sistema de Contagem de Culto - Desenvolvido por UMADEMATS</div>
+            <button id="btn-terminar" class="btn btn-terminar">TERMINAR CULTO</button>
+            <button id="btn-novo-culto" class="btn btn-novo-culto">Novo Culto</button>
         </div>
-        
         <!-- Tela de Resumo -->
         <div id="tela-resumo" class="hidden">
-            <div class="logo-container">
-                <img src="https://raw.githubusercontent.com/mblarson/sistema-culto/main/Untitled%20design.png" alt="Logotipo" class="logo">
+            <img src="https://raw.githubusercontent.com/mblarson/sistema-culto/main/Untitled%20design.png" alt="Logotipo" class="logo">
+            <h1 class="resumo-titulo">Resumo do Culto</h1>
+            <div class="resumo-container">
+                <div class="resumo-info">Culto: <span id="resumo-nome"></span></div>
+                <div class="resumo-info">Data e Hora: <span id="resumo-data"></span></div>
+                <div class="resumo-destaque" id="resumo-contador">0</div>
+                <div class="resumo-info">participantes presentes</div>
             </div>
-            <div class="content-container">
-                <h1 class="resumo-titulo">Resumo do Culto</h1>
-                <div class="resumo-container">
-                    <div class="resumo-info">Culto: <span id="resumo-nome"></span></div>
-                    <div class="resumo-info">Data e Hora: <span id="resumo-data"></span></div>
-                    <div class="resumo-destaque" id="resumo-contador">0</div>
-                    <div class="resumo-info">participantes presentes</div>
-                </div>
-                <button id="btn-exportar-pdf" class="btn btn-exportar-pdf">Exportar PDF</button>
-                <button id="btn-exportar-texto" class="btn btn-exportar-texto">Exportar Texto</button>
-                <button id="btn-voltar-inicio" class="btn btn-novo-culto">Voltar ao Início</button>
-                <div class="footer">Sistema de Contagem de Culto - Desenvolvido por UMADEMATS</div>
-            </div>
+            <button id="btn-exportar-pdf" class="btn btn-exportar-pdf">Exportar PDF</button>
+            <button id="btn-exportar-texto" class="btn btn-exportar-texto">Exportar Texto</button>
+            <button id="btn-voltar-inicio" class="btn btn-novo-culto">Voltar ao Início</button>
+        </div>
+        <div class="footer">
+            Sistema de Contagem de Culto - Desenvolvido por UMADEMATS
         </div>
     </div>
-    
     <div id="notification" class="notification"></div>
-
     <script>
-        // Elementos do DOM
         const telaInicial = document.getElementById('tela-inicial');
         const telaNome = document.getElementById('tela-nome');
         const telaPrincipal = document.getElementById('tela-principal');
@@ -587,151 +344,58 @@
         const btnExportarTexto = document.getElementById('btn-exportar-texto');
         const btnVoltarInicio = document.getElementById('btn-voltar-inicio');
         const notification = document.getElementById('notification');
-        
-        // Elementos da tela de resumo
         const resumoNome = document.getElementById('resumo-nome');
         const resumoData = document.getElementById('resumo-data');
         const resumoContador = document.getElementById('resumo-contador');
-        
-        // Elementos de controle de orientação
-        const btnVertical = document.getElementById('btn-vertical');
-        const btnHorizontal = document.getElementById('btn-horizontal');
-        
-        // Variáveis
         let contador = 0;
         let nomeCulto = '';
-        let orientacaoAtual = 'vertical'; // 'vertical' ou 'horizontal'
-        
-        // Funções de persistência
         function salvarDados() {
-            const dados = {
-                nomeCulto: nomeCulto,
-                contador: contador,
-                orientacao: orientacaoAtual
-            };
-            localStorage.setItem('dadosCulto', JSON.stringify(dados));
+            localStorage.setItem('dadosCulto', JSON.stringify({ nomeCulto, contador }));
         }
-        
         function carregarDados() {
             const dados = JSON.parse(localStorage.getItem('dadosCulto') || '{}');
             nomeCulto = dados.nomeCulto || '';
             contador = dados.contador || 0;
-            orientacaoAtual = dados.orientacao || 'vertical';
-            
-            // Aplicar orientação salva
-            aplicarOrientacao(orientacaoAtual);
-            
-            // Se houver dados salvos, mostrar o botão de continuar
-            if (nomeCulto) {
-                btnContinuar.classList.remove('hidden');
-            }
+            if (nomeCulto) btnContinuar.classList.remove('hidden');
         }
-        
         function limparDados() {
             localStorage.removeItem('dadosCulto');
             nomeCulto = '';
             contador = 0;
             btnContinuar.classList.add('hidden');
         }
-        
-        // Funções de orientação
-        function aplicarOrientacao(orientacao) {
-            orientacaoAtual = orientacao;
-            
-            if (orientacao === 'horizontal') {
-                document.body.classList.add('horizontal-tela-principal');
-                btnVertical.classList.remove('active');
-                btnHorizontal.classList.add('active');
-            } else {
-                document.body.classList.remove('horizontal-tela-principal');
-                btnVertical.classList.add('active');
-                btnHorizontal.classList.remove('active');
-            }
-            
-            salvarDados();
-        }
-        
-        function detectarOrientacaoAutomatica() {
-            if (window.matchMedia("(orientation: landscape)").matches) {
-                // Apenas mudar para horizontal se estiver na tela principal e em tablet grande
-                if (!telaPrincipal.classList.contains('hidden') && window.innerWidth > 768) {
-                    aplicarOrientacao('horizontal');
-                }
-            } else {
-                aplicarOrientacao('vertical');
-            }
-        }
-        
-        // Carregar dados ao iniciar
         carregarDados();
-        
-        // Detectar mudanças de orientação
-        window.addEventListener('orientationchange', () => {
-            setTimeout(detectarOrientacaoAutomatica, 100);
-        });
-        
-        // Detectar mudanças de tamanho da janela
-        window.addEventListener('resize', () => {
-            setTimeout(detectarOrientacaoAutomatica, 100);
-        });
-        
-        // Event Listeners dos botões de orientação
-        btnVertical.addEventListener('click', () => {
-            aplicarOrientacao('vertical');
-        });
-        
-        btnHorizontal.addEventListener('click', () => {
-            aplicarOrientacao('horizontal');
-        });
-        
-        // Event Listeners existentes
         btnIniciar.addEventListener('click', () => {
             telaInicial.classList.add('hidden');
             telaNome.classList.remove('hidden');
             nomeCultoInput.focus();
         });
-        
         btnContinuar.addEventListener('click', () => {
             tituloCulto.textContent = nomeCulto;
             atualizarContador();
             telaInicial.classList.add('hidden');
             telaPrincipal.classList.remove('hidden');
-            
-            // Se estiver em tablet grande e paisagem, ativar modo horizontal
-            if (window.innerWidth > 768 && window.matchMedia("(orientation: landscape)").matches) {
-                aplicarOrientacao('horizontal');
-            }
         });
-        
         btnConfirmar.addEventListener('click', () => {
             nomeCulto = nomeCultoInput.value.trim();
             if (!nomeCulto) {
                 showNotification('Por favor, digite o nome do culto!');
                 return;
             }
-            
             tituloCulto.textContent = nomeCulto;
             telaNome.classList.add('hidden');
             telaPrincipal.classList.remove('hidden');
             salvarDados();
-            
-            // Se estiver em tablet grande e paisagem, ativar modo horizontal
-            if (window.innerWidth > 768 && window.matchMedia("(orientation: landscape)").matches) {
-                aplicarOrientacao('horizontal');
-            }
         });
-        
         nomeCultoInput.addEventListener('keypress', e => {
             if (e.key === 'Enter') btnConfirmar.click();
         });
-        
         btnCheguei.addEventListener('click', () => {
             contador++;
             atualizarContador();
             salvarDados();
             showNotification('Mais um participante registrado!');
         });
-        
         btnRemover.addEventListener('click', () => {
             if (contador > 0) {
                 contador--;
@@ -742,7 +406,6 @@
                 showNotification('Não há participantes para remover!');
             }
         });
-        
         btnZerar.addEventListener('click', () => {
             if (contador > 0 && confirm('Tem certeza que deseja zerar o contador?')) {
                 contador = 0;
@@ -753,16 +416,13 @@
                 showNotification('O contador já está em zero!');
             }
         });
-        
         btnExportar.addEventListener('click', () => {
             if (contador === 0) {
                 showNotification('Não há participantes para exportar!');
                 return;
             }
-            
             exportarPDF();
         });
-        
         btnNovoCulto.addEventListener('click', () => {
             if (confirm('Deseja iniciar um novo culto? Os dados atuais serão perdidos.')) {
                 limparDados();
@@ -771,18 +431,13 @@
                 atualizarContador();
             }
         });
-        
         btnTerminar.addEventListener('click', () => {
             if (contador === 0) {
                 showNotification('Não há participantes para exportar!');
                 return;
             }
-            
-            if (confirm(`Deseja terminar o culto "${nomeCulto}"?`)) {
-                mostrarResumo();
-            }
+            if (confirm(`Deseja terminar o culto "${nomeCulto}"?`)) mostrarResumo();
         });
-        
         btnExportarPdf.addEventListener('click', exportarPDF);
         btnExportarTexto.addEventListener('click', exportarTexto);
         btnVoltarInicio.addEventListener('click', () => {
@@ -791,12 +446,9 @@
             telaInicial.classList.remove('hidden');
             atualizarContador();
         });
-        
-        // Funções
         function atualizarContador() {
             contadorElement.textContent = contador;
         }
-        
         function mostrarResumo() {
             resumoNome.textContent = nomeCulto;
             resumoData.textContent = new Date().toLocaleString('pt-BR');
@@ -804,49 +456,36 @@
             telaPrincipal.classList.add('hidden');
             telaResumo.classList.remove('hidden');
         }
-        
         function exportarPDF() {
             if (!window.jspdf) {
                 showNotification('Erro: Biblioteca PDF não carregada.');
                 return;
             }
-            
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            
             doc.setFontSize(20);
             doc.text('Relatório de Presença no Culto', 105, 20, { align: 'center' });
-            
             doc.setFontSize(16);
             doc.text(`Culto: ${nomeCulto}`, 20, 40);
             doc.text(`Total de Participantes: ${contador}`, 20, 60);
-            
             doc.text(`Data e Hora: ${new Date().toLocaleString('pt-BR')}`, 20, 80);
-            
             doc.setFontSize(12);
             doc.text('Sistema de Contagem de Culto', 105, 280, { align: 'center' });
-            
             doc.save(`relatorio_culto_${nomeCulto.replace(/\s+/g, '_')}.pdf`);
             showNotification('PDF exportado com sucesso!');
         }
-        
         function exportarTexto() {
             const texto = `RELATÓRIO DE PRESENÇA NO CULTO\n\nCulto: ${nomeCulto}\nTotal de Participantes: ${contador}\nData e Hora: ${new Date().toLocaleString('pt-BR')}\n\nSistema de Contagem de Culto`;
-            
             navigator.clipboard.writeText(texto).then(() => {
                 showNotification('Texto copiado para a área de transferência!');
             }).catch(() => {
                 prompt('Copie o texto abaixo:', texto);
             });
         }
-        
         function showNotification(message) {
             notification.textContent = message;
             notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
+            setTimeout(() => notification.classList.remove('show'), 3000);
         }
     </script>
 </body>
