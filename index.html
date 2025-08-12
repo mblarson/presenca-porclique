@@ -230,6 +230,34 @@
             background: linear-gradient(45deg, #2980b9, #21618c);
         }
         
+        .resumo-container {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 158, 27, 0.3);
+        }
+        
+        .resumo-titulo {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #ff9e1b;
+            text-shadow: 0 2px 10px rgba(255, 158, 27, 0.5);
+        }
+        
+        .resumo-info {
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+        
+        .resumo-destaque {
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 15px 0;
+            color: #ff9e1b;
+            text-shadow: 0 0 15px rgba(255, 158, 27, 0.7);
+        }
+        
         @media (max-width: 600px) {
             .container {
                 padding: 15px 20px;
@@ -268,6 +296,76 @@
             .btn-terminar, .btn-exportar-pdf, .btn-exportar-texto {
                 font-size: 1rem;
                 padding: 8px 15px;
+            }
+        }
+        
+        /* Media Query para orientação paisagem */
+        @media (orientation: landscape) and (max-height: 1000px) {
+            .container {
+                max-width: 80%;
+                padding: 15px 30px;
+            }
+            
+            .logo {
+                width: 200px;
+                height: 120px;
+                margin-bottom: 5px;
+            }
+            
+            h1 {
+                font-size: 1.4rem;
+                margin-bottom: 5px;
+            }
+            
+            .contador {
+                font-size: 3.5rem;
+                margin: 10px 0;
+            }
+            
+            .btn-cheguei {
+                font-size: 1.2rem;
+                padding: 12px 20px;
+                margin: 10px 0;
+            }
+            
+            .btn-controle {
+                font-size: 0.9rem;
+                padding: 8px 15px;
+                min-width: 80px;
+            }
+            
+            .titulo-culto {
+                font-size: 1.5rem;
+                margin-bottom: 8px;
+            }
+            
+            .btn-terminar, .btn-exportar-pdf, .btn-exportar-texto {
+                font-size: 1rem;
+                padding: 10px 20px;
+            }
+            
+            .input-container {
+                margin: 15px 0;
+            }
+            
+            input {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+            
+            .resumo-titulo {
+                font-size: 1.5rem;
+                margin-bottom: 10px;
+            }
+            
+            .resumo-info {
+                font-size: 1rem;
+                margin: 5px 0;
+            }
+            
+            .resumo-destaque {
+                font-size: 3rem;
+                margin: 10px 0;
             }
         }
     </style>
@@ -349,33 +447,40 @@
         const resumoContador = document.getElementById('resumo-contador');
         let contador = 0;
         let nomeCulto = '';
+        
         function salvarDados() {
             localStorage.setItem('dadosCulto', JSON.stringify({ nomeCulto, contador }));
         }
+        
         function carregarDados() {
             const dados = JSON.parse(localStorage.getItem('dadosCulto') || '{}');
             nomeCulto = dados.nomeCulto || '';
             contador = dados.contador || 0;
             if (nomeCulto) btnContinuar.classList.remove('hidden');
         }
+        
         function limparDados() {
             localStorage.removeItem('dadosCulto');
             nomeCulto = '';
             contador = 0;
             btnContinuar.classList.add('hidden');
         }
+        
         carregarDados();
+        
         btnIniciar.addEventListener('click', () => {
             telaInicial.classList.add('hidden');
             telaNome.classList.remove('hidden');
             nomeCultoInput.focus();
         });
+        
         btnContinuar.addEventListener('click', () => {
             tituloCulto.textContent = nomeCulto;
             atualizarContador();
             telaInicial.classList.add('hidden');
             telaPrincipal.classList.remove('hidden');
         });
+        
         btnConfirmar.addEventListener('click', () => {
             nomeCulto = nomeCultoInput.value.trim();
             if (!nomeCulto) {
@@ -387,15 +492,18 @@
             telaPrincipal.classList.remove('hidden');
             salvarDados();
         });
+        
         nomeCultoInput.addEventListener('keypress', e => {
             if (e.key === 'Enter') btnConfirmar.click();
         });
+        
         btnCheguei.addEventListener('click', () => {
             contador++;
             atualizarContador();
             salvarDados();
             showNotification('Mais um participante registrado!');
         });
+        
         btnRemover.addEventListener('click', () => {
             if (contador > 0) {
                 contador--;
@@ -406,6 +514,7 @@
                 showNotification('Não há participantes para remover!');
             }
         });
+        
         btnZerar.addEventListener('click', () => {
             if (contador > 0 && confirm('Tem certeza que deseja zerar o contador?')) {
                 contador = 0;
@@ -416,6 +525,7 @@
                 showNotification('O contador já está em zero!');
             }
         });
+        
         btnExportar.addEventListener('click', () => {
             if (contador === 0) {
                 showNotification('Não há participantes para exportar!');
@@ -423,6 +533,7 @@
             }
             exportarPDF();
         });
+        
         btnNovoCulto.addEventListener('click', () => {
             if (confirm('Deseja iniciar um novo culto? Os dados atuais serão perdidos.')) {
                 limparDados();
@@ -431,6 +542,7 @@
                 atualizarContador();
             }
         });
+        
         btnTerminar.addEventListener('click', () => {
             if (contador === 0) {
                 showNotification('Não há participantes para exportar!');
@@ -438,6 +550,7 @@
             }
             if (confirm(`Deseja terminar o culto "${nomeCulto}"?`)) mostrarResumo();
         });
+        
         btnExportarPdf.addEventListener('click', exportarPDF);
         btnExportarTexto.addEventListener('click', exportarTexto);
         btnVoltarInicio.addEventListener('click', () => {
@@ -446,9 +559,11 @@
             telaInicial.classList.remove('hidden');
             atualizarContador();
         });
+        
         function atualizarContador() {
             contadorElement.textContent = contador;
         }
+        
         function mostrarResumo() {
             resumoNome.textContent = nomeCulto;
             resumoData.textContent = new Date().toLocaleString('pt-BR');
@@ -456,6 +571,7 @@
             telaPrincipal.classList.add('hidden');
             telaResumo.classList.remove('hidden');
         }
+        
         function exportarPDF() {
             if (!window.jspdf) {
                 showNotification('Erro: Biblioteca PDF não carregada.');
@@ -474,6 +590,7 @@
             doc.save(`relatorio_culto_${nomeCulto.replace(/\s+/g, '_')}.pdf`);
             showNotification('PDF exportado com sucesso!');
         }
+        
         function exportarTexto() {
             const texto = `RELATÓRIO DE PRESENÇA NO CULTO\n\nCulto: ${nomeCulto}\nTotal de Participantes: ${contador}\nData e Hora: ${new Date().toLocaleString('pt-BR')}\n\nSistema de Contagem de Culto`;
             navigator.clipboard.writeText(texto).then(() => {
@@ -482,6 +599,7 @@
                 prompt('Copie o texto abaixo:', texto);
             });
         }
+        
         function showNotification(message) {
             notification.textContent = message;
             notification.classList.add('show');
