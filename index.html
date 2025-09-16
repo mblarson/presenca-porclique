@@ -573,7 +573,7 @@
         <!-- Tela Inicial -->
         <div id="tela-inicial" class="tela">
             <div class="sistema-title">
-                <h1>UMADE MATS</h1>
+                <h1>UMADEMATS</h1>
                 <p>Sistema de Controle de Presença</p>
             </div>
             
@@ -751,11 +751,12 @@
         
         // Atualizar a tela inicial com base no estado do culto
         function atualizarTelaInicial() {
-            // Garantir que o container esteja escondido inicialmente
+            // Primeiro, sempre esconder o container
             exibicoes.cultoAtivoContainer.classList.add('hidden');
             
-            if (estado.cultoAtivo && estado.nomeCulto) {
-                // Só mostrar o container se houver um culto ativo E um nome de culto
+            // Verificar se há um culto ativo
+            if (estado.cultoAtivo && estado.nomeCulto && estado.nomeCulto.trim() !== '') {
+                // Só mostrar o container se houver um culto ativo E um nome de culto válido
                 botoes.continuar.classList.remove('hidden');
                 botoes.iniciar.disabled = true;
                 exibicoes.cultoAtivoContainer.classList.remove('hidden');
@@ -764,6 +765,7 @@
                 // Esconder o container e habilitar o botão de iniciar
                 botoes.continuar.classList.add('hidden');
                 botoes.iniciar.disabled = false;
+                // Garantir que o container esteja escondido
                 exibicoes.cultoAtivoContainer.classList.add('hidden');
             }
         }
