@@ -480,7 +480,40 @@
             color: #FF7E00;
         }
         
-        @media (max-width: 768px) {
+        /* Media queries para dispositivos móveis em modo paisagem */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .setores-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+            }
+            
+            .setor-item.visitante {
+                grid-column: span 3;
+            }
+            
+            .setor-name {
+                font-size: 1.1rem;
+            }
+            
+            .setor-counter {
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
+            }
+            
+            .control-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 1.1rem;
+            }
+            
+            .setor-item {
+                padding: 14px;
+            }
+        }
+        
+        /* Media queries para dispositivos móveis em modo retrato */
+        @media (max-width: 768px) and (orientation: portrait) {
             .container {
                 padding: 20px;
             }
