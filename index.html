@@ -3,608 +3,964 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Contagem de Culto</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <title>Controle de Presença - Culto</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
         
         body {
-            background: #062C3F;
-            color: white;
+            background-color: #041a2a;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
             padding: 20px;
+            color: #fff;
         }
         
         .container {
-            text-align: center;
-            background: rgba(10, 25, 47, 0.9);
-            padding: 20px;
+            background-color: #062C3F;
             border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 
+                        0 0 100px rgba(255, 126, 0, 0.1);
             width: 100%;
-            max-width: 500px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 158, 27, 0.3);
+            max-width: 900px;
+            padding: 30px 50px 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, #1a2a6c, #FF7E00, #b21f1f);
+            border-radius: 20px 20px 0 0;
+        }
+        
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
         }
         
         .logo {
-            width: 300px;
-            height: 200px;
-            margin-bottom: -15px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo img {
+            height: 100%;
+            max-width: 300px;
             object-fit: contain;
-            filter: drop-shadow(0 0 10px rgba(255, 158, 27, 0.5));
         }
         
         h1 {
-            margin-top: -25px;
-            margin-bottom: 10px;
-            font-size: 1.8rem;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
             color: #ffffff;
+            margin-bottom: 25px;
+            font-size: 2.8rem;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 25%;
+            width: 50%;
+            height: 4px;
+            background: linear-gradient(90deg, #1a2a6c, #FF7E00);
+            border-radius: 2px;
+        }
+        
+        h2 {
+            color: #ffffff;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            font-weight: 600;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            color: #e0e0e0;
+            margin-bottom: 40px;
+            font-size: 1.3rem;
+            font-weight: 400;
         }
         
         .btn {
-            background: linear-gradient(45deg, #062C3F, #0a3d5a);
+            background: linear-gradient(135deg, #FF7E00, #FF9E40);
             color: white;
-            border: 1px solid rgba(255, 158, 27, 0.5);
-            padding: 10px 20px;
-            font-size: 1rem;
+            border: none;
+            padding: 18px 40px;
             border-radius: 50px;
+            font-size: 1.1rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin: 6px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            margin: 15px 10px;
             font-weight: 600;
-            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(255, 126, 0, 0.4);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 200px;
         }
         
         .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-            background: linear-gradient(45deg, #0a3d5a, #062C3F);
-            border-color: #ff9e1b;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 126, 0, 0.6);
         }
         
-        .btn-cheguei {
-            background: linear-gradient(45deg, #ff9e1b, #ff7700);
-            font-size: 1.6rem;
-            padding: 18px 30px;
-            margin: 15px 0;
-            width: 100%;
-            max-width: 350px;
-            border: none;
-        }
-        
-        .btn-cheguei:hover {
-            background: linear-gradient(45deg, #ff7700, #e65c00);
-        }
-        
-        .contador {
-            font-size: 5rem;
-            font-weight: bold;
-            margin: 15px 0;
-            color: #ff9e1b;
-            text-shadow: 0 0 15px rgba(255, 158, 27, 0.7);
-            line-height: 1;
-        }
-        
-        .botoes-controle {
-            display: flex;
-            justify-content: center;
-            gap: 4px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .btn-controle {
-            background: linear-gradient(45deg, #062C3F, #0a3d5a);
-            padding: 10px 20px;
-            font-size: 1rem;
-            min-width: 90px;
-            border: 1px solid rgba(255, 158, 27, 0.3);
-        }
-        
-        .btn-controle:hover {
-            background: linear-gradient(45deg, #0a3d5a, #062C3F);
-            border-color: #ff9e1b;
-        }
-        
-        .input-container {
-            margin: 20px 0;
-        }
-        
-        input {
-            padding: 15px 25px;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            border: 1px solid rgba(255, 158, 27, 0.5);
-            width: 90%;
-            max-width: 350px;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.95);
-            color: #062C3F;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        input:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(255, 158, 27, 0.5);
+        .btn:active {
             transform: translateY(-2px);
+        }
+        
+        .btn i {
+            margin-right: 10px;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #b21f1f, #e53935);
+            box-shadow: 0 5px 15px rgba(178, 31, 31, 0.4);
+        }
+        
+        .btn-danger:hover {
+            box-shadow: 0 10px 25px rgba(178, 31, 31, 0.6);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #4caf50);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+        
+        .btn-success:hover {
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.6);
+        }
+        
+        .btn:disabled {
+            background: linear-gradient(135deg, #666, #888);
+            cursor: not-allowed;
+            box-shadow: none;
+            opacity: 0.7;
+        }
+        
+        .btn:disabled:hover {
+            transform: none;
+        }
+        
+        .input-group {
+            margin: 40px 0;
+        }
+        
+        .input-group input {
+            width: 100%;
+            max-width: 450px;
+            padding: 18px 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            font-size: 1.2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #FF7E00;
+            box-shadow: 0 5px 15px rgba(255, 126, 0, 0.3);
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        .setores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .setor-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .setor-item.visitante {
+            grid-column: span 2;
+        }
+        
+        .setor-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #1a2a6c, #FF7E00);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .setor-item:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .setor-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        .setor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .setor-name {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #ffffff;
+        }
+        
+        .setor-counter {
+            background: linear-gradient(135deg, #1a2a6c, #3f51b5);
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 10px rgba(26, 42, 108, 0.5);
+        }
+        
+        .setor-controls {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .control-btn {
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .control-btn:hover {
+            transform: scale(1.1);
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+        
+        .control-btn.minus {
+            color: #ff6b6b;
+        }
+        
+        .control-btn.minus:hover {
+            border-color: #ff6b6b;
+            background-color: rgba(255, 107, 107, 0.2);
+        }
+        
+        .control-btn.plus {
+            color: #51cf66;
+        }
+        
+        .control-btn.plus:hover {
+            border-color: #51cf66;
+            background-color: rgba(81, 207, 102, 0.2);
+        }
+        
+        .resumo-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 40px 0;
+            text-align: left;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .resumo-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1.1rem;
+            color: #e0e0e0;
+        }
+        
+        .resumo-item:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin-top: 15px;
+            padding-top: 20px;
+            color: #ffffff;
         }
         
         .hidden {
             display: none;
         }
         
-        .titulo-culto {
-            font-size: 2rem;
-            margin-bottom: 15px;
-            color: #ff9e1b;
-            text-shadow: 0 2px 10px rgba(255, 158, 27, 0.5);
+        .password-container {
+            margin: 40px 0;
         }
         
-        .footer {
-            margin-top: 25px;
-            font-size: 0.9rem;
-            opacity: 0.7;
+        .password-container input {
+            width: 100%;
+            max-width: 350px;
+            padding: 18px 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            margin: 0 10px;
             text-align: center;
-            color: #ffffff;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .password-container input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .password-container input:focus {
+            outline: none;
+            border-color: #1a2a6c;
+            box-shadow: 0 5px 15px rgba(26, 42, 108, 0.4);
+            background-color: rgba(255, 255, 255, 0.15);
         }
         
         .notification {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(45deg, #062C3F, #0a3d5a);
+            top: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #28a745, #4caf50);
             color: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            padding: 18px 30px;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
             z-index: 1000;
             transform: translateX(150%);
-            transition: transform 0.3s ease;
-            border-left: 4px solid #ff9e1b;
+            transition: transform 0.5s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .notification i {
+            margin-right: 12px;
+            font-size: 1.3rem;
         }
         
         .notification.show {
             transform: translateX(0);
         }
         
-        .btn-novo-culto {
-            background: linear-gradient(45deg, #e74c3c, #c0392b);
-            margin-top: 15px;
-            font-size: 1rem;
-            padding: 10px 20px;
+        .notification.error {
+            background: linear-gradient(135deg, #b21f1f, #e53935);
         }
         
-        .btn-novo-culto:hover {
-            background: linear-gradient(45deg, #c0392b, #a93226);
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
         }
         
-        .btn-terminar {
-            background: linear-gradient(45deg, #27ae60, #2ecc71);
-            margin-top: 15px;
+        .sistema-title {
+            margin-bottom: 30px;
+        }
+        
+        .sistema-title h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #ffffff, #FF7E00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            text-shadow: none;
+        }
+        
+        .sistema-title p {
+            color: #e0e0e0;
+            font-size: 1.1rem;
+        }
+        
+        .culto-ativo-container {
+            background-color: rgba(255, 126, 0, 0.15);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0 30px;
+            border: 1px solid rgba(255, 126, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .culto-ativo-label {
             font-size: 1.2rem;
-            padding: 12px 25px;
-            width: 100%;
-            max-width: 300px;
+            color: #e0e0e0;
+            margin-right: 15px;
         }
         
-        .btn-terminar:hover {
-            background: linear-gradient(45deg, #2ecc71, #27ae60);
+        .culto-ativo-nome {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #FF7E00;
+            padding: 8px 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 126, 0, 0.3);
         }
         
-        .btn-exportar-pdf {
-            background: linear-gradient(45deg, #e74c3c, #c0392b);
-            margin-top: 15px;
+        .total-geral-container {
+            background: linear-gradient(135deg, rgba(26, 42, 108, 0.8), rgba(63, 81, 181, 0.8));
+            border-radius: 16px;
+            padding: 20px;
+            margin: 0 0 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .total-geral-label {
             font-size: 1.2rem;
-            padding: 12px 25px;
-            width: 100%;
-            max-width: 300px;
+            color: #e0e0e0;
+            margin-bottom: 10px;
         }
         
-        .btn-exportar-pdf:hover {
-            background: linear-gradient(45deg, #c0392b, #a93226);
+        .total-geral-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
         
-        .btn-exportar-texto {
-            background: linear-gradient(45deg, #3498db, #2980b9);
-            margin-top: 10px;
-            font-size: 1.2rem;
-            padding: 12px 25px;
-            width: 100%;
-            max-width: 300px;
-        }
-        
-        .btn-exportar-texto:hover {
-            background: linear-gradient(45deg, #2980b9, #21618c);
-        }
-        
-        .resumo-container {
-            margin: 20px 0;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 158, 27, 0.3);
-        }
-        
-        .resumo-titulo {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: #ff9e1b;
-            text-shadow: 0 2px 10px rgba(255, 158, 27, 0.5);
-        }
-        
-        .resumo-info {
-            font-size: 1.2rem;
-            margin: 10px 0;
-        }
-        
-        .resumo-destaque {
-            font-size: 4rem;
-            font-weight: bold;
-            margin: 15px 0;
-            color: #ff9e1b;
-            text-shadow: 0 0 15px rgba(255, 158, 27, 0.7);
-        }
-        
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
             .container {
-                padding: 15px 20px;
-            }
-            
-            .logo {
-                width: 190px;
-                height: 100px;
-                margin-bottom: 10px;
+                padding: 20px;
             }
             
             h1 {
-                font-size: 1.6rem;
+                font-size: 2.2rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .setores-grid {
+                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+                gap: 15px;
+            }
+            
+            .setor-item.visitante {
+                grid-column: span 1;
             }
             
             .btn {
-                font-size: 0.8rem;
-                padding: 8px 16px;
-            }
-            
-            .btn-cheguei {
-                font-size: 1.2rem;
-                padding: 12px 20px;
-            }
-            
-            .btn-controle {
-                font-size: 0.8rem;
-                padding: 8px 16px;
-                min-width: 70px;
-            }
-            
-            .contador {
-                font-size: 4rem;
-            }
-            
-            .btn-terminar, .btn-exportar-pdf, .btn-exportar-texto {
-                font-size: 1rem;
-                padding: 8px 15px;
-            }
-        }
-        
-        /* Media Query para orientação paisagem */
-        @media (orientation: landscape) and (max-height: 1000px) {
-            .container {
-                max-width: 80%;
                 padding: 15px 30px;
+                min-width: 180px;
+                font-size: 1rem;
             }
             
             .logo {
-                width: 200px;
-                height: 120px;
-                margin-bottom: 5px;
+                height: 80px;
             }
             
-            h1 {
-                font-size: 1.4rem;
-                margin-bottom: 5px;
+            .culto-ativo-container {
+                flex-direction: column;
+                gap: 10px;
             }
             
-            .contador {
-                font-size: 3.5rem;
-                margin: 10px 0;
+            .culto-ativo-label {
+                margin-right: 0;
             }
             
-            .btn-cheguei {
-                font-size: 1.2rem;
-                padding: 12px 20px;
-                margin: 10px 0;
-            }
-            
-            .btn-controle {
-                font-size: 0.9rem;
-                padding: 8px 15px;
-                min-width: 80px;
-            }
-            
-            .titulo-culto {
-                font-size: 1.5rem;
-                margin-bottom: 8px;
-            }
-            
-            .btn-terminar, .btn-exportar-pdf, .btn-exportar-texto {
-                font-size: 1rem;
-                padding: 10px 20px;
-            }
-            
-            .input-container {
-                margin: 15px 0;
-            }
-            
-            input {
-                padding: 12px 20px;
-                font-size: 1rem;
-            }
-            
-            .resumo-titulo {
-                font-size: 1.5rem;
-                margin-bottom: 10px;
-            }
-            
-            .resumo-info {
-                font-size: 1rem;
-                margin: 5px 0;
-            }
-            
-            .resumo-destaque {
-                font-size: 3rem;
-                margin: 10px 0;
+            .total-geral-value {
+                font-size: 2.5rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Logo em todas as telas -->
+        <div class="logo-container">
+            <div class="logo">
+                <img src="./assets/images/logo-umademats.png" alt="Logo UMADE MATS">
+            </div>
+        </div>
+        
         <!-- Tela Inicial -->
-        <div id="tela-inicial">
-            <img src="https://raw.githubusercontent.com/mblarson/sistema-culto/main/Untitled%20design.png" alt="Logotipo" class="logo">
-            <h1>CONTAGEM DE PRESENTES</h1>
-            <button id="btn-iniciar" class="btn">INICIAR CULTO</button>
-            <button id="btn-continuar" class="btn hidden">CONTINUAR CULTO</button>
+        <div id="tela-inicial" class="tela">
+            <div class="sistema-title">
+                <h1>UMADE MATS</h1>
+                <p>Sistema de Controle de Presença</p>
+            </div>
+            
+            <!-- Container para mostrar o culto ativo -->
+            <div id="culto-ativo-container" class="culto-ativo-container hidden">
+                <div class="culto-ativo-label">Culto em andamento:</div>
+                <div id="culto-ativo-nome" class="culto-ativo-nome"></div>
+            </div>
+            
+            <div class="btn-group">
+                <button id="btn-iniciar" class="btn">
+                    <i class="fas fa-play"></i> Iniciar Culto
+                </button>
+                <button id="btn-continuar" class="btn hidden">
+                    <i class="fas fa-redo"></i> Continuar Culto
+                </button>
+            </div>
         </div>
+        
         <!-- Tela de Nome do Culto -->
-        <div id="tela-nome" class="hidden">
-            <img src="https://raw.githubusercontent.com/mblarson/sistema-culto/main/Untitled%20design.png" alt="Logotipo" class="logo">
-            <h1>Digite o nome do culto</h1>
-            <div class="input-container">
-                <input type="text" id="nome-culto" placeholder="Nome do culto" autofocus>
+        <div id="tela-nome" class="tela hidden">
+            <h1>Informar Nome do Culto</h1>
+            <div class="input-group">
+                <input type="text" id="input-nome-culto" placeholder="Digite o nome do culto">
             </div>
-            <button id="btn-confirmar" class="btn">INICIAR</button>
-        </div>
-        <!-- Tela Principal -->
-        <div id="tela-principal" class="hidden">
-            <img src="https://raw.githubusercontent.com/mblarson/sistema-culto/main/Untitled%20design.png" alt="Logotipo" class="logo">
-            <h1 class="titulo-culto" id="titulo-culto"></h1>
-            <div class="contador" id="contador">0</div>
-            <button id="btn-cheguei" class="btn btn-cheguei">Cheguei ao culto 😎</button>
-            <div class="botoes-controle">
-                <button id="btn-remover" class="btn btn-controle">Remover</button>
-                <button id="btn-zerar" class="btn btn-controle">Zerar</button>
-                <button id="btn-exportar" class="btn btn-controle">Exportar</button>
+            <div class="btn-group">
+                <button id="btn-salvar-nome" class="btn">
+                    <i class="fas fa-save"></i> Salvar Nome
+                </button>
+                <button id="btn-voltar-inicio" class="btn btn-danger">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </button>
             </div>
-            <button id="btn-terminar" class="btn btn-terminar">TERMINAR CULTO</button>
-            <button id="btn-novo-culto" class="btn btn-novo-culto">Novo Culto</button>
         </div>
+        
+        <!-- Tela de Controle de Presença -->
+        <div id="tela-controle" class="tela hidden">
+            <h1>CONTROLE DE PRESENÇA</h1>
+            <h2 id="nome-culto-exibicao"></h2>
+            <p class="subtitle">Informe seu Setor</p>
+            
+            <!-- Totalizador geral -->
+            <div class="total-geral-container">
+                <div class="total-geral-label">TOTAL DE PESSOAS</div>
+                <div id="total-geral-value" class="total-geral-value">0</div>
+            </div>
+            
+            <div class="setores-grid" id="setores-grid">
+                <!-- Setores serão inseridos dinamicamente -->
+            </div>
+            
+            <button id="btn-encerrar" class="btn btn-danger">
+                <i class="fas fa-stop"></i> ENCERRAR CULTO
+            </button>
+        </div>
+        
+        <!-- Tela de Senha -->
+        <div id="tela-senha" class="tela hidden">
+            <h1>Encerrar Culto</h1>
+            <p class="subtitle">Digite a senha para encerrar o culto</p>
+            
+            <div class="password-container">
+                <input type="password" id="input-senha" placeholder="Senha">
+            </div>
+            
+            <div class="btn-group">
+                <button id="btn-confirmar-senha" class="btn">
+                    <i class="fas fa-check"></i> Confirmar
+                </button>
+                <button id="btn-cancelar-senha" class="btn btn-danger">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+            </div>
+        </div>
+        
         <!-- Tela de Resumo -->
-        <div id="tela-resumo" class="hidden">
-            <img src="https://raw.githubusercontent.com/mblarson/sistema-culto/main/Untitled%20design.png" alt="Logotipo" class="logo">
-            <h1 class="resumo-titulo">Resumo do Culto</h1>
-            <div class="resumo-container">
-                <div class="resumo-info">Culto: <span id="resumo-nome"></span></div>
-                <div class="resumo-info">Data e Hora: <span id="resumo-data"></span></div>
-                <div class="resumo-destaque" id="resumo-contador">0</div>
-                <div class="resumo-info">participantes presentes</div>
+        <div id="tela-resumo" class="tela hidden">
+            <h1>Resumo do Culto</h1>
+            <h2 id="nome-culto-resumo"></h2>
+            
+            <div class="resumo-container" id="resumo-container">
+                <!-- Resumo será inserido dinamicamente -->
             </div>
-            <button id="btn-exportar-pdf" class="btn btn-exportar-pdf">Exportar PDF</button>
-            <button id="btn-exportar-texto" class="btn btn-exportar-texto">Exportar Texto</button>
-            <button id="btn-voltar-inicio" class="btn btn-novo-culto">Voltar ao Início</button>
-        </div>
-        <div class="footer">
-            Sistema de Contagem de Culto - Desenvolvido por UMADEMATS
+            
+            <div class="btn-group">
+                <button id="btn-gerar-json" class="btn btn-success">
+                    <i class="fas fa-file-download"></i> Gerar JSON
+                </button>
+                <button id="btn-novo-culto" class="btn">
+                    <i class="fas fa-plus"></i> Iniciar Novo Culto
+                </button>
+            </div>
         </div>
     </div>
-    <div id="notification" class="notification"></div>
+    
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-text"></span>
+    </div>
+    
     <script>
-        const telaInicial = document.getElementById('tela-inicial');
-        const telaNome = document.getElementById('tela-nome');
-        const telaPrincipal = document.getElementById('tela-principal');
-        const telaResumo = document.getElementById('tela-resumo');
-        const btnIniciar = document.getElementById('btn-iniciar');
-        const btnContinuar = document.getElementById('btn-continuar');
-        const btnConfirmar = document.getElementById('btn-confirmar');
-        const nomeCultoInput = document.getElementById('nome-culto');
-        const tituloCulto = document.getElementById('titulo-culto');
-        const contadorElement = document.getElementById('contador');
-        const btnCheguei = document.getElementById('btn-cheguei');
-        const btnRemover = document.getElementById('btn-remover');
-        const btnZerar = document.getElementById('btn-zerar');
-        const btnExportar = document.getElementById('btn-exportar');
-        const btnNovoCulto = document.getElementById('btn-novo-culto');
-        const btnTerminar = document.getElementById('btn-terminar');
-        const btnExportarPdf = document.getElementById('btn-exportar-pdf');
-        const btnExportarTexto = document.getElementById('btn-exportar-texto');
-        const btnVoltarInicio = document.getElementById('btn-voltar-inicio');
-        const notification = document.getElementById('notification');
-        const resumoNome = document.getElementById('resumo-nome');
-        const resumoData = document.getElementById('resumo-data');
-        const resumoContador = document.getElementById('resumo-contador');
-        let contador = 0;
-        let nomeCulto = '';
+        // Elementos do DOM
+        const telas = {
+            inicial: document.getElementById('tela-inicial'),
+            nome: document.getElementById('tela-nome'),
+            controle: document.getElementById('tela-controle'),
+            senha: document.getElementById('tela-senha'),
+            resumo: document.getElementById('tela-resumo')
+        };
         
-        function salvarDados() {
-            localStorage.setItem('dadosCulto', JSON.stringify({ nomeCulto, contador }));
-        }
+        const botoes = {
+            iniciar: document.getElementById('btn-iniciar'),
+            continuar: document.getElementById('btn-continuar'),
+            salvarNome: document.getElementById('btn-salvar-nome'),
+            voltarInicio: document.getElementById('btn-voltar-inicio'),
+            encerrar: document.getElementById('btn-encerrar'),
+            confirmarSenha: document.getElementById('btn-confirmar-senha'),
+            cancelarSenha: document.getElementById('btn-cancelar-senha'),
+            gerarJson: document.getElementById('btn-gerar-json'),
+            novoCulto: document.getElementById('btn-novo-culto')
+        };
         
-        function carregarDados() {
-            const dados = JSON.parse(localStorage.getItem('dadosCulto') || '{}');
-            nomeCulto = dados.nomeCulto || '';
-            contador = dados.contador || 0;
-            if (nomeCulto) btnContinuar.classList.remove('hidden');
-        }
+        const inputs = {
+            nomeCulto: document.getElementById('input-nome-culto'),
+            senha: document.getElementById('input-senha')
+        };
         
-        function limparDados() {
-            localStorage.removeItem('dadosCulto');
-            nomeCulto = '';
-            contador = 0;
-            btnContinuar.classList.add('hidden');
-        }
+        const exibicoes = {
+            nomeCulto: document.getElementById('nome-culto-exibicao'),
+            nomeCultoResumo: document.getElementById('nome-culto-resumo'),
+            resumoContainer: document.getElementById('resumo-container'),
+            setoresGrid: document.getElementById('setores-grid'),
+            cultoAtivoContainer: document.getElementById('culto-ativo-container'),
+            cultoAtivoNome: document.getElementById('culto-ativo-nome'),
+            totalGeralValue: document.getElementById('total-geral-value')
+        };
         
-        carregarDados();
+        const notificationText = document.getElementById('notification-text');
         
-        btnIniciar.addEventListener('click', () => {
-            telaInicial.classList.add('hidden');
-            telaNome.classList.remove('hidden');
-            nomeCultoInput.focus();
-        });
+        // Constantes
+        const SENHA_PADRAO = 'secretaria';
+        const SETORES = ['A', 'B', 'C1', 'C2', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'M', 'N', 'VISITANTE'];
         
-        btnContinuar.addEventListener('click', () => {
-            tituloCulto.textContent = nomeCulto;
-            atualizarContador();
-            telaInicial.classList.add('hidden');
-            telaPrincipal.classList.remove('hidden');
-        });
+        // Estado do aplicativo
+        let estado = {
+            cultoAtivo: false,
+            nomeCulto: '',
+            setores: {},
+            totalGeral: 0
+        };
         
-        btnConfirmar.addEventListener('click', () => {
-            nomeCulto = nomeCultoInput.value.trim();
-            if (!nomeCulto) {
-                showNotification('Por favor, digite o nome do culto!');
-                return;
-            }
-            tituloCulto.textContent = nomeCulto;
-            telaNome.classList.add('hidden');
-            telaPrincipal.classList.remove('hidden');
-            salvarDados();
-        });
-        
-        nomeCultoInput.addEventListener('keypress', e => {
-            if (e.key === 'Enter') btnConfirmar.click();
-        });
-        
-        btnCheguei.addEventListener('click', () => {
-            contador++;
-            atualizarContador();
-            salvarDados();
-            showNotification('Mais um participante registrado!');
-        });
-        
-        btnRemover.addEventListener('click', () => {
-            if (contador > 0) {
-                contador--;
-                atualizarContador();
-                salvarDados();
-                showNotification('Participante removido!');
-            } else {
-                showNotification('Não há participantes para remover!');
-            }
-        });
-        
-        btnZerar.addEventListener('click', () => {
-            if (contador > 0 && confirm('Tem certeza que deseja zerar o contador?')) {
-                contador = 0;
-                atualizarContador();
-                salvarDados();
-                showNotification('Contador zerado!');
-            } else if (contador === 0) {
-                showNotification('O contador já está em zero!');
-            }
-        });
-        
-        btnExportar.addEventListener('click', () => {
-            if (contador === 0) {
-                showNotification('Não há participantes para exportar!');
-                return;
-            }
-            exportarPDF();
-        });
-        
-        btnNovoCulto.addEventListener('click', () => {
-            if (confirm('Deseja iniciar um novo culto? Os dados atuais serão perdidos.')) {
-                limparDados();
-                telaPrincipal.classList.add('hidden');
-                telaInicial.classList.remove('hidden');
-                atualizarContador();
-            }
-        });
-        
-        btnTerminar.addEventListener('click', () => {
-            if (contador === 0) {
-                showNotification('Não há participantes para exportar!');
-                return;
-            }
-            if (confirm(`Deseja terminar o culto "${nomeCulto}"?`)) mostrarResumo();
-        });
-        
-        btnExportarPdf.addEventListener('click', exportarPDF);
-        btnExportarTexto.addEventListener('click', exportarTexto);
-        btnVoltarInicio.addEventListener('click', () => {
-            limparDados();
-            telaResumo.classList.add('hidden');
-            telaInicial.classList.remove('hidden');
-            atualizarContador();
-        });
-        
-        function atualizarContador() {
-            contadorElement.textContent = contador;
-        }
-        
-        function mostrarResumo() {
-            resumoNome.textContent = nomeCulto;
-            resumoData.textContent = new Date().toLocaleString('pt-BR');
-            resumoContador.textContent = contador;
-            telaPrincipal.classList.add('hidden');
-            telaResumo.classList.remove('hidden');
-        }
-        
-        function exportarPDF() {
-            if (!window.jspdf) {
-                showNotification('Erro: Biblioteca PDF não carregada.');
-                return;
-            }
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.setFontSize(20);
-            doc.text('Relatório de Presença no Culto', 105, 20, { align: 'center' });
-            doc.setFontSize(16);
-            doc.text(`Culto: ${nomeCulto}`, 20, 40);
-            doc.text(`Total de Participantes: ${contador}`, 20, 60);
-            doc.text(`Data e Hora: ${new Date().toLocaleString('pt-BR')}`, 20, 80);
-            doc.setFontSize(12);
-            doc.text('Sistema de Contagem de Culto', 105, 280, { align: 'center' });
-            doc.save(`relatorio_culto_${nomeCulto.replace(/\s+/g, '_')}.pdf`);
-            showNotification('PDF exportado com sucesso!');
-        }
-        
-        function exportarTexto() {
-            const texto = `RELATÓRIO DE PRESENÇA NO CULTO\n\nCulto: ${nomeCulto}\nTotal de Participantes: ${contador}\nData e Hora: ${new Date().toLocaleString('pt-BR')}\n\nSistema de Contagem de Culto`;
-            navigator.clipboard.writeText(texto).then(() => {
-                showNotification('Texto copiado para a área de transferência!');
-            }).catch(() => {
-                prompt('Copie o texto abaixo:', texto);
+        // Inicializar setores
+        function inicializarSetores() {
+            SETORES.forEach(setor => {
+                estado.setores[setor] = 0;
             });
+            estado.totalGeral = 0;
         }
         
-        function showNotification(message) {
-            notification.textContent = message;
-            notification.classList.add('show');
-            setTimeout(() => notification.classList.remove('show'), 3000);
+        // Salvar estado no localStorage
+        function salvarEstado() {
+            localStorage.setItem('estadoCulto', JSON.stringify(estado));
         }
+        
+        // Carregar estado do localStorage
+        function carregarEstado() {
+            const estadoSalvo = localStorage.getItem('estadoCulto');
+            if (estadoSalvo) {
+                estado = JSON.parse(estadoSalvo);
+                
+                // Verificar se o culto está ativo
+                if (estado.cultoAtivo) {
+                    botoes.continuar.classList.remove('hidden');
+                    botoes.iniciar.disabled = true;
+                    exibicoes.cultoAtivoContainer.classList.remove('hidden');
+                    exibicoes.cultoAtivoNome.textContent = estado.nomeCulto;
+                }
+            } else {
+                inicializarSetores();
+            }
+        }
+        
+        // Mostrar notificação
+        function mostrarNotificacao(mensagem, tipo = 'success') {
+            const notification = document.getElementById('notification');
+            notificationText.textContent = mensagem;
+            
+            if (tipo === 'error') {
+                notification.classList.add('error');
+                notification.innerHTML = `<i class="fas fa-exclamation-circle"></i><span id="notification-text">${mensagem}</span>`;
+            } else {
+                notification.classList.remove('error');
+                notification.innerHTML = `<i class="fas fa-check-circle"></i><span id="notification-text">${mensagem}</span>`;
+            }
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Navegar entre telas
+        function mostrarTela(nomeTela) {
+            Object.values(telas).forEach(tela => {
+                tela.classList.add('hidden');
+            });
+            
+            telas[nomeTela].classList.remove('hidden');
+        }
+        
+        // Atualizar totalizador geral
+        function atualizarTotalGeral() {
+            estado.totalGeral = Object.values(estado.setores).reduce((sum, count) => sum + count, 0);
+            exibicoes.totalGeralValue.textContent = estado.totalGeral;
+            salvarEstado();
+        }
+        
+        // Renderizar setores na tela de controle
+        function renderizarSetores() {
+            exibicoes.setoresGrid.innerHTML = '';
+            
+            SETORES.forEach(setor => {
+                const setorDiv = document.createElement('div');
+                setorDiv.className = 'setor-item';
+                
+                // Adicionar classe especial para o setor VISITANTE
+                if (setor === 'VISITANTE') {
+                    setorDiv.classList.add('visitante');
+                }
+                
+                setorDiv.innerHTML = `
+                    <div class="setor-header">
+                        <div class="setor-name">${setor}</div>
+                        <div class="setor-counter" id="contador-${setor}">${estado.setores[setor]}</div>
+                    </div>
+                    <div class="setor-controls">
+                        <button class="control-btn minus" data-setor="${setor}">-</button>
+                        <button class="control-btn plus" data-setor="${setor}">+</button>
+                    </div>
+                `;
+                
+                // Adicionar evento de clique no setor inteiro
+                setorDiv.addEventListener('click', (e) => {
+                    // Se o clique foi nos botões de controle, não incrementa
+                    if (e.target.classList.contains('control-btn')) return;
+                    
+                    incrementarSetor(setor);
+                });
+                
+                exibicoes.setoresGrid.appendChild(setorDiv);
+            });
+            
+            // Adicionar eventos aos botões de controle
+            document.querySelectorAll('.control-btn.minus').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const setor = btn.getAttribute('data-setor');
+                    decrementarSetor(setor);
+                });
+            });
+            
+            document.querySelectorAll('.control-btn.plus').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const setor = btn.getAttribute('data-setor');
+                    incrementarSetor(setor);
+                });
+            });
+            
+            // Atualizar o totalizador geral
+            atualizarTotalGeral();
+        }
+        
+        // Incrementar contador de um setor
+        function incrementarSetor(setor) {
+            estado.setores[setor]++;
+            document.getElementById(`contador-${setor}`).textContent = estado.setores[setor];
+            atualizarTotalGeral();
+        }
+        
+        // Decrementar contador de um setor
+        function decrementarSetor(setor) {
+            if (estado.setores[setor] > 0) {
+                estado.setores[setor]--;
+                document.getElementById(`contador-${setor}`).textContent = estado.setores[setor];
+                atualizarTotalGeral();
+            }
+        }
+        
+        // Renderizar resumo
+        function renderizarResumo() {
+            exibicoes.nomeCultoResumo.textContent = estado.nomeCulto;
+            exibicoes.resumoContainer.innerHTML = '';
+            
+            let total = 0;
+            
+            SETORES.forEach(setor => {
+                const count = estado.setores[setor];
+                total += count;
+                
+                const resumoItem = document.createElement('div');
+                resumoItem.className = 'resumo-item';
+                resumoItem.innerHTML = `
+                    <span>Setor ${setor}:</span>
+                    <span>${count} pessoas</span>
+                `;
+                
+                exibicoes.resumoContainer.appendChild(resumoItem);
+            });
+            
+            const totalItem = document.createElement('div');
+            totalItem.className = 'resumo-item';
+            totalItem.innerHTML = `
+                <span>TOTAL GERAL:</span>
+                <span>${total} pessoas</span>
+            `;
+            
+            exibicoes.resumoContainer.appendChild(totalItem);
+        }
+        
+        // Gerar JSON
+        function gerarJSON() {
+            const dados = {
+                nomeCulto: estado.nomeCulto,
+                data: new Date().toISOString(),
+                setores: estado.setores,
+                total: estado.totalGeral
+            };
+            
+            const jsonStr = JSON.stringify(dados, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `presenca-${estado.nomeCulto.replace(/\s+/g, '-').toLowerCase()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            mostrarNotificacao('JSON gerado com sucesso!');
+        }
+        
+        // Event Listeners
+        botoes.iniciar.addEventListener('click', () => {
+            // Verificar se já existe um culto ativo
+            if (estado.cultoAtivo) {
+                mostrarNotificacao('Já existe um culto em andamento. Encerre-o antes de iniciar um novo.', 'error');
+                return;
+            }
+            
+            mostrarTela('nome');
+        });
+        
+        botoes.continuar.addEventListener('click', () => {
+            exibicoes.nomeCulto.textContent = estado.nomeCulto;
+            renderizarSetores();
+            mostrarTela('controle');
+        });
+        
+        botoes.salvarNome.addEventListener('click', () => {
+            const nome = inputs.nomeCulto.value.trim();
+            
+            if (nome === '') {
+                mostrarNotificacao('Por favor, digite o nome do culto', 'error');
+                return;
+            }
+            
+            estado.nomeCulto = nome;
+            estado.cultoAtivo = true;
+            salvarEstado();
+            
+            exibicoes.nomeCulto.textContent = nome;
+            renderizarSetores();
+            mostrarTela('controle');
+            mostrarNotificacao('Culto iniciado com sucesso!');
+        });
+        
+        botoes.voltarInicio.addEventListener('click', () => {
+            mostrarTela('inicial');
+        });
+        
+        botoes.encerrar.addEventListener('click', () => {
+            mostrarTela('senha');
+        });
+        
+        botoes.confirmarSenha.addEventListener('click', () => {
+            const senha = inputs.senha.value;
+            
+            if (senha !== SENHA_PADRAO) {
+                mostrarNotificacao('Senha incorreta!', 'error');
+                return;
+            }
+            
+            estado.cultoAtivo = false;
+            salvarEstado();
+            
+            renderizarResumo();
+            mostrarTela('resumo');
+            mostrarNotificacao('Culto encerrado com sucesso!');
+        });
+        
+        botoes.cancelarSenha.addEventListener('click', () => {
+            inputs.senha.value = '';
+            mostrarTela('controle');
+        });
+        
+        botoes.gerarJson.addEventListener('click', gerarJSON);
+        
+        botoes.novoCulto.addEventListener('click', () => {
+            inicializarSetores();
+            salvarEstado();
+            
+            // Resetar a interface inicial
+            botoes.continuar.classList.add('hidden');
+            botoes.iniciar.disabled = false;
+            exibicoes.cultoAtivoContainer.classList.add('hidden');
+            
+            mostrarTela('inicial');
+            mostrarNotificacao('Pronto para iniciar um novo culto!');
+        });
+        
+        // Inicialização
+        carregarEstado();
     </script>
 </body>
 </html>
