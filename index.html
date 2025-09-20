@@ -6,6 +6,8 @@
     <title>Controle de Presença - Culto</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -152,6 +154,15 @@
         
         .btn-success:hover {
             box-shadow: 0 10px 25px rgba(40, 167, 69, 0.6);
+        }
+        
+        .btn-info {
+            background: linear-gradient(135deg, #17a2b8, #20c997);
+            box-shadow: 0 5px 15px rgba(23, 162, 184, 0.4);
+        }
+        
+        .btn-info:hover {
+            box-shadow: 0 10px 25px rgba(23, 162, 184, 0.6);
         }
         
         .btn:disabled {
@@ -454,6 +465,12 @@
             background-color: rgba(255, 255, 255, 0.1);
             border-radius: 30px;
             border: 1px solid rgba(255, 126, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .culto-ativo-nome.no-culto {
+            color: #888;
+            border-color: rgba(136, 136, 136, 0.3);
         }
         
         .footer-controle {
@@ -478,6 +495,128 @@
         .total-pessoas i {
             margin-right: 8px;
             color: #FF7E00;
+        }
+        
+        .upload-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .upload-container:hover {
+            border-color: rgba(255, 126, 0, 0.5);
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        .upload-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            min-height: 200px;
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: #FF7E00;
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            font-size: 1.1rem;
+            color: #e0e0e0;
+            margin-bottom: 15px;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .file-list {
+            margin-top: 20px;
+            width: 100%;
+            text-align: left;
+        }
+        
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .file-name {
+            font-size: 0.95rem;
+            color: #e0e0e0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 70%;
+        }
+        
+        .file-remove {
+            color: #ff6b6b;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        
+        .chart-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+            margin: 0 auto;
+            max-width: 500px;
+        }
+        
+        .resultados-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: left;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .resultado-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1rem;
+            color: #e0e0e0;
+        }
+        
+        .resultado-item:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-top: 12px;
+            padding-top: 16px;
+            color: #ffffff;
+        }
+        
+        .resultado-total {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #FF7E00;
+            margin-bottom: 20px;
+            text-align: center;
         }
         
         /* Media queries para dispositivos móveis em modo paisagem */
@@ -558,6 +697,10 @@
                 flex-direction: column;
                 gap: 16px;
             }
+            
+            .chart-wrapper {
+                height: 250px;
+            }
         }
     </style>
 </head>
@@ -573,12 +716,12 @@
         <!-- Tela Inicial -->
         <div id="tela-inicial" class="tela">
             <div class="sistema-title">
-                <h1>UMADEMATS</h1>
+                <h1>UMADE MATS</h1>
                 <p>Sistema de Controle de Presença</p>
             </div>
             
             <!-- Container para mostrar o culto ativo -->
-            <div id="culto-ativo-container" class="culto-ativo-container hidden">
+            <div id="culto-ativo-container" class="culto-ativo-container">
                 <div class="culto-ativo-label">Culto em andamento:</div>
                 <div id="culto-ativo-nome" class="culto-ativo-nome"></div>
             </div>
@@ -589,6 +732,9 @@
                 </button>
                 <button id="btn-continuar" class="btn hidden">
                     <i class="fas fa-redo"></i> Continuar Culto
+                </button>
+                <button id="btn-gerar-resultados" class="btn btn-info">
+                    <i class="fas fa-chart-pie"></i> Gerar Resultados
                 </button>
             </div>
         </div>
@@ -663,8 +809,69 @@
                 <button id="btn-gerar-json" class="btn btn-success">
                     <i class="fas fa-file-download"></i> Gerar JSON
                 </button>
+                <button id="btn-download-imagem" class="btn btn-info">
+                    <i class="fas fa-image"></i> Download Imagem
+                </button>
                 <button id="btn-novo-culto" class="btn">
                     <i class="fas fa-plus"></i> Iniciar Novo Culto
+                </button>
+            </div>
+        </div>
+        
+        <!-- Tela de Upload JSON -->
+        <div id="tela-upload" class="tela hidden">
+            <h1>Gerar Resultados</h1>
+            <p class="subtitle">Selecione os arquivos JSON para análise</p>
+            
+            <div class="upload-container">
+                <div class="upload-area" id="upload-area">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <p class="upload-text">Arraste e solte os arquivos JSON aqui ou clique para selecionar</p>
+                    <button class="btn" id="btn-selecionar-arquivos">
+                        <i class="fas fa-folder-open"></i> Selecionar Arquivos
+                    </button>
+                    <input type="file" id="file-input" class="file-input" multiple accept=".json">
+                </div>
+                
+                <div class="file-list" id="file-list">
+                    <!-- Lista de arquivos será inserida dinamicamente -->
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button id="btn-gerar-resultados-json" class="btn btn-success" disabled>
+                    <i class="fas fa-chart-bar"></i> Gerar Resultado
+                </button>
+                <button id="btn-voltar-inicio-upload" class="btn btn-danger">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </button>
+            </div>
+        </div>
+        
+        <!-- Tela de Resultados -->
+        <div id="tela-resultados" class="tela hidden">
+            <h1>Resultados de Presença</h1>
+            
+            <div class="resultado-total" id="resultado-total">
+                Total de Pessoas: 0
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-wrapper">
+                    <canvas id="presenca-chart"></canvas>
+                </div>
+            </div>
+            
+            <div class="resultados-container" id="resultados-container">
+                <!-- Resultados serão inseridos dinamicamente -->
+            </div>
+            
+            <div class="btn-group">
+                <button id="btn-download-imagem-resultados" class="btn btn-info">
+                    <i class="fas fa-image"></i> Download Imagem
+                </button>
+                <button id="btn-voltar-inicio-resultados" class="btn">
+                    <i class="fas fa-arrow-left"></i> Voltar ao Início
                 </button>
             </div>
         </div>
@@ -682,7 +889,9 @@
             nome: document.getElementById('tela-nome'),
             controle: document.getElementById('tela-controle'),
             senha: document.getElementById('tela-senha'),
-            resumo: document.getElementById('tela-resumo')
+            resumo: document.getElementById('tela-resumo'),
+            upload: document.getElementById('tela-upload'),
+            resultados: document.getElementById('tela-resultados')
         };
         
         const botoes = {
@@ -694,12 +903,20 @@
             confirmarSenha: document.getElementById('btn-confirmar-senha'),
             cancelarSenha: document.getElementById('btn-cancelar-senha'),
             gerarJson: document.getElementById('btn-gerar-json'),
-            novoCulto: document.getElementById('btn-novo-culto')
+            novoCulto: document.getElementById('btn-novo-culto'),
+            gerarResultados: document.getElementById('btn-gerar-resultados'),
+            selecionarArquivos: document.getElementById('btn-selecionar-arquivos'),
+            gerarResultadosJson: document.getElementById('btn-gerar-resultados-json'),
+            voltarInicioUpload: document.getElementById('btn-voltar-inicio-upload'),
+            downloadImagem: document.getElementById('btn-download-imagem'),
+            downloadImagemResultados: document.getElementById('btn-download-imagem-resultados'),
+            voltarInicioResultados: document.getElementById('btn-voltar-inicio-resultados')
         };
         
         const inputs = {
             nomeCulto: document.getElementById('input-nome-culto'),
-            senha: document.getElementById('input-senha')
+            senha: document.getElementById('input-senha'),
+            fileInput: document.getElementById('file-input')
         };
         
         const exibicoes = {
@@ -709,7 +926,11 @@
             setoresGrid: document.getElementById('setores-grid'),
             cultoAtivoContainer: document.getElementById('culto-ativo-container'),
             cultoAtivoNome: document.getElementById('culto-ativo-nome'),
-            totalGeralValue: document.getElementById('total-geral-value')
+            totalGeralValue: document.getElementById('total-geral-value'),
+            fileList: document.getElementById('file-list'),
+            resultadoTotal: document.getElementById('resultado-total'),
+            resultadosContainer: document.getElementById('resultados-container'),
+            uploadArea: document.getElementById('upload-area')
         };
         
         const notificationText = document.getElementById('notification-text');
@@ -723,8 +944,13 @@
             cultoAtivo: false,
             nomeCulto: '',
             setores: {},
-            totalGeral: 0
+            totalGeral: 0,
+            arquivosJSON: [],
+            dadosResultados: {}
         };
+        
+        // Gráfico
+        let presencaChart = null;
         
         // Inicializar setores
         function inicializarSetores() {
@@ -751,22 +977,20 @@
         
         // Atualizar a tela inicial com base no estado do culto
         function atualizarTelaInicial() {
-            // Primeiro, sempre esconder o container
-            exibicoes.cultoAtivoContainer.classList.add('hidden');
+            // Sempre mostrar o container
+            exibicoes.cultoAtivoContainer.classList.remove('hidden');
             
             // Verificar se há um culto ativo
             if (estado.cultoAtivo && estado.nomeCulto && estado.nomeCulto.trim() !== '') {
-                // Só mostrar o container se houver um culto ativo E um nome de culto válido
                 botoes.continuar.classList.remove('hidden');
                 botoes.iniciar.disabled = true;
-                exibicoes.cultoAtivoContainer.classList.remove('hidden');
                 exibicoes.cultoAtivoNome.textContent = estado.nomeCulto;
+                exibicoes.cultoAtivoNome.classList.remove('no-culto');
             } else {
-                // Esconder o container e habilitar o botão de iniciar
                 botoes.continuar.classList.add('hidden');
                 botoes.iniciar.disabled = false;
-                // Garantir que o container esteja escondido
-                exibicoes.cultoAtivoContainer.classList.add('hidden');
+                exibicoes.cultoAtivoNome.textContent = 'Nenhum culto';
+                exibicoes.cultoAtivoNome.classList.add('no-culto');
             }
         }
         
@@ -936,6 +1160,177 @@
             mostrarNotificacao('JSON gerado com sucesso!');
         }
         
+        // Download de imagem
+        function downloadImagem(elemento, nomeArquivo) {
+            // Configurações para o html2canvas
+            const config = {
+                backgroundColor: null,
+                scale: 2, // Aumenta a qualidade da imagem
+                logging: false,
+                useCORS: true,
+                allowTaint: true
+            };
+            
+            html2canvas(elemento, config).then(canvas => {
+                // Criar um link para download
+                const link = document.createElement('a');
+                link.download = nomeArquivo;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                mostrarNotificacao('Imagem baixada com sucesso!');
+            }).catch(err => {
+                console.error('Erro ao gerar imagem:', err);
+                mostrarNotificacao('Erro ao gerar imagem', 'error');
+            });
+        }
+        
+        // Processar arquivos JSON
+        function processarArquivosJSON() {
+            if (estado.arquivosJSON.length === 0) {
+                mostrarNotificacao('Selecione pelo menos um arquivo JSON', 'error');
+                return;
+            }
+            
+            // Inicializar dados de resultados
+            estado.dadosResultados = {};
+            SETORES.forEach(setor => {
+                estado.dadosResultados[setor] = 0;
+            });
+            
+            // Processar cada arquivo
+            estado.arquivosJSON.forEach(arquivo => {
+                try {
+                    const dados = JSON.parse(arquivo.conteudo);
+                    
+                    // Somar os valores de cada setor
+                    SETORES.forEach(setor => {
+                        if (dados.setores && dados.setores[setor]) {
+                            estado.dadosResultados[setor] += dados.setores[setor];
+                        }
+                    });
+                } catch (e) {
+                    console.error('Erro ao processar arquivo:', arquivo.nome, e);
+                }
+            });
+            
+            // Calcular total geral
+            const totalGeral = Object.values(estado.dadosResultados).reduce((sum, count) => sum + count, 0);
+            
+            // Exibir resultados
+            exibirResultados(totalGeral);
+            
+            // Navegar para a tela de resultados
+            mostrarTela('resultados');
+        }
+        
+        // Exibir resultados
+        function exibirResultados(totalGeral) {
+            // Atualizar total geral
+            exibicoes.resultadoTotal.textContent = `Total de Pessoas: ${totalGeral}`;
+            
+            // Limpar container de resultados
+            exibicoes.resultadosContainer.innerHTML = '';
+            
+            // Adicionar itens de resultado
+            SETORES.forEach(setor => {
+                const count = estado.dadosResultados[setor];
+                const percentual = totalGeral > 0 ? ((count / totalGeral) * 100).toFixed(1) : 0;
+                
+                const resultadoItem = document.createElement('div');
+                resultadoItem.className = 'resultado-item';
+                resultadoItem.innerHTML = `
+                    <span>Setor ${setor}:</span>
+                    <span>${count} pessoas (${percentual}%)</span>
+                `;
+                
+                exibicoes.resultadosContainer.appendChild(resultadoItem);
+            });
+            
+            // Adicionar item total
+            const totalItem = document.createElement('div');
+            totalItem.className = 'resultado-item';
+            totalItem.innerHTML = `
+                <span>TOTAL GERAL:</span>
+                <span>${totalGeral} pessoas</span>
+            `;
+            
+            exibicoes.resultadosContainer.appendChild(totalItem);
+            
+            // Gerar gráfico
+            gerarGraficoPizza(estado.dadosResultados, totalGeral);
+        }
+        
+        // Gerar gráfico de pizza
+        function gerarGraficoPizza(dados, total) {
+            const ctx = document.getElementById('presenca-chart').getContext('2d');
+            
+            // Destruir gráfico anterior se existir
+            if (presencaChart) {
+                presencaChart.destroy();
+            }
+            
+            // Preparar dados para o gráfico
+            const labels = [];
+            const data = [];
+            const backgroundColors = [];
+            
+            // Cores para cada setor
+            const colors = [
+                '#FF7E00', '#1a2a6c', '#b21f1f', '#28a745', '#17a2b8',
+                '#6f42c1', '#fd7e14', '#20c997', '#e83e8c', '#6610f2',
+                '#f8f9fa', '#343a40', '#ffc107', '#6c757d'
+            ];
+            
+            SETORES.forEach((setor, index) => {
+                if (dados[setor] > 0) {
+                    labels.push(`Setor ${setor}`);
+                    data.push(dados[setor]);
+                    backgroundColors.push(colors[index]);
+                }
+            });
+            
+            // Criar gráfico
+            presencaChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: backgroundColors,
+                        borderColor: '#062C3F',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#e0e0e0',
+                                font: {
+                                    size: 12,
+                                    family: "'Poppins', sans-serif"
+                                },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const percentual = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                                    return `${label}: ${value} pessoas (${percentual}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
         // Event Listeners
         botoes.iniciar.addEventListener('click', () => {
             // Verificar se já existe um culto ativo
@@ -1002,6 +1397,10 @@
         
         botoes.gerarJson.addEventListener('click', gerarJSON);
         
+        botoes.downloadImagem.addEventListener('click', () => {
+            downloadImagem(telas.resumo, `resumo-${estado.nomeCulto.replace(/\s+/g, '-').toLowerCase()}.png`);
+        });
+        
         botoes.novoCulto.addEventListener('click', () => {
             inicializarSetores();
             salvarEstado();
@@ -1011,6 +1410,131 @@
             
             mostrarTela('inicial');
             mostrarNotificacao('Pronto para iniciar um novo culto!');
+        });
+        
+        botoes.gerarResultados.addEventListener('click', () => {
+            mostrarTela('upload');
+        });
+        
+        botoes.selecionarArquivos.addEventListener('click', () => {
+            inputs.fileInput.click();
+        });
+        
+        inputs.fileInput.addEventListener('change', (e) => {
+            processarArquivosSelecionados(e.target.files);
+        });
+        
+        // Drag and drop
+        exibicoes.uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            exibicoes.uploadArea.style.backgroundColor = 'rgba(255, 126, 0, 0.1)';
+        });
+        
+        exibicoes.uploadArea.addEventListener('dragleave', () => {
+            exibicoes.uploadArea.style.backgroundColor = '';
+        });
+        
+        exibicoes.uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            exibicoes.uploadArea.style.backgroundColor = '';
+            
+            processarArquivosSelecionados(e.dataTransfer.files);
+        });
+        
+        // Processar arquivos selecionados
+        function processarArquivosSelecionados(arquivos) {
+            // Limpar lista de arquivos atual
+            estado.arquivosJSON = [];
+            exibicoes.fileList.innerHTML = '';
+            
+            // Verificar se há arquivos
+            if (arquivos.length === 0) {
+                botoes.gerarResultadosJson.disabled = true;
+                return;
+            }
+            
+            // Processar cada arquivo
+            Array.from(arquivos).forEach(arquivo => {
+                // Verificar se é um arquivo JSON
+                if (arquivo.type === 'application/json' || arquivo.name.endsWith('.json')) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = (e) => {
+                        // Adicionar arquivo à lista
+                        estado.arquivosJSON.push({
+                            nome: arquivo.name,
+                            conteudo: e.target.result
+                        });
+                        
+                        // Adicionar à interface
+                        adicionarArquivoLista(arquivo.name);
+                        
+                        // Habilitar botão de gerar resultados
+                        botoes.gerarResultadosJson.disabled = false;
+                    };
+                    
+                    reader.readAsText(arquivo);
+                } else {
+                    mostrarNotificacao(`O arquivo ${arquivo.name} não é um JSON válido`, 'error');
+                }
+            });
+        }
+        
+        // Adicionar arquivo à lista
+        function adicionarArquivoLista(nomeArquivo) {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            
+            const fileName = document.createElement('div');
+            fileName.className = 'file-name';
+            fileName.textContent = nomeArquivo;
+            
+            const fileRemove = document.createElement('i');
+            fileRemove.className = 'fas fa-times-circle file-remove';
+            fileRemove.addEventListener('click', () => {
+                // Remover arquivo da lista
+                estado.arquivosJSON = estado.arquivosJSON.filter(arquivo => arquivo.nome !== nomeArquivo);
+                
+                // Remover da interface
+                fileItem.remove();
+                
+                // Desabilitar botão se não houver arquivos
+                if (estado.arquivosJSON.length === 0) {
+                    botoes.gerarResultadosJson.disabled = true;
+                }
+            });
+            
+            fileItem.appendChild(fileName);
+            fileItem.appendChild(fileRemove);
+            exibicoes.fileList.appendChild(fileItem);
+        }
+        
+        botoes.gerarResultadosJson.addEventListener('click', processarArquivosJSON);
+        
+        botoes.voltarInicioUpload.addEventListener('click', () => {
+            // Limpar arquivos
+            estado.arquivosJSON = [];
+            exibicoes.fileList.innerHTML = '';
+            botoes.gerarResultadosJson.disabled = true;
+            
+            mostrarTela('inicial');
+        });
+        
+        botoes.downloadImagemResultados.addEventListener('click', () => {
+            downloadImagem(telas.resultados, 'resultados-presenca.png');
+        });
+        
+        botoes.voltarInicioResultados.addEventListener('click', () => {
+            // Limpar dados de resultados
+            estado.dadosResultados = {};
+            
+            // Destruir gráfico
+            if (presencaChart) {
+                presencaChart.destroy();
+                presencaChart = null;
+            }
+            
+            mostrarTela('inicial');
         });
         
         // Inicialização
